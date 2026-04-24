@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <!-- Keep head empty for fragments -->
+</head>
+<body>
+<div th:fragment="header">
+  <div class="nb-header">
+    <!-- Left Section -->
+    <div class="nb-header-left">
+      <div class="nb-logo">
+        <a th:href="@{/landingPage}" class="nb-logo" style="text-decoration: none; color: inherit;">
+          <div class="nb-logo-icon">%</div>
+          <div class="nb-logo-text"><strong>NO</strong><span>BROKER</span></div>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- Right Section -->
+    <div class="nb-header-right">
+      <button class="nb-btn-filled" onclick="window.location.href='/'">Post Your Property</button>
+
+
+      <div class="nb-profile-name" style="display: flex; align-items: center;">
+        <img src="https://assets.nobroker.in/nb-new/public/MaterialIcons/accountCircle.svg"
+             alt="Profile Icon"
+             class="h-3.5p w-3.5p mx-0.5p border-1 border-gray-lightest text-gray-lightest mr-0.3p rounded-full">
+
+        <!-- If user is NOT logged in -->
+        <div th:if="${user == null}">
+          <a th:href="@{/login}">
+            <button>Sign up/Login</button>
+          </a>
+        </div>
+
+        <!-- If user IS logged in -->
+        <div th:if="${user != null}">
+          <a th:href="@{'/profile/view/' + ${user.userId}}"
+             style="text-decoration: none; color: black;"
+             th:text="${user.name}">
+            Username
+          </a>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

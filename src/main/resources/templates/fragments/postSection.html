@@ -1,0 +1,160 @@
+<!-- templates/fragments/postSection.html -->
+<div th:fragment="postSection(allProperties, hasNext)" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div th:each="property : ${allProperties}" class="property-card">
+        <a th:href="@{'/viewProperty/' + ${property.propertyId}}">
+            <h3 style="font-size:18px; font-weight:600; color:#333; margin:0 0 4px 0;"
+                th:text="${property.bhkType + ' BHK Flat in ' + property.apartmentName + (property.isSale ? ' For Sale near ' : ' For Rent near ') + (property.address != null ? property.address.landmark : 'your location')}">
+                Apartment Title
+            </h3>
+        </a>
+        <p style="font-size:13px; color:#555; margin:0 0 10px 0;">
+            <span th:if="${property.address != null}"
+                  th:text="${property.address.landmark + ' ' + property.address.locality + ', ' + property.address.city}">
+                Address
+            </span>
+            <a href="#" style="color:#007bff; text-decoration:none; margin-left:10px;">🔍 Explore Nearby</a>
+        </p>
+        <div style="display:flex; gap:12px; margin-bottom:12px;">
+            <div style="flex:1; min-width:0; max-width:200px; border:1px solid #ddd; border-radius:6px; padding:8px; text-align:center;">
+
+                <div th:if="${(property.isSale and property.price != null) or (!property.isSale and property.expectedRent != null)}"
+                     style="margin:0; font-size:14px; font-weight:bold; color:#222;">
+                    ₹<span th:text="${property.isSale ? property.price : property.expectedRent}">0</span><span th:if="${!property.isSale}">/mo</span>
+                </div>
+
+
+                <p style="margin:0; font-size:13px; font-weight:bold; color:#333;">
+                    <span th:text="${property.isSale ? ' Sale' : ' Rent'}"></span>
+                </p>
+
+
+            </div>
+            <div style="flex:1; border:1px solid #ddd; border-radius:6px; padding:8px; text-align:center;">
+                <p style="margin:0; font-size:12px; color:#555;"
+                   th:text="${property.isSale} ? 'Estimated EMI' : 'Expected Rent'">
+                    Expected Deposit
+                </p>
+
+                <p style="margin:0; font-size:14px; font-weight:bold; color:#222;">
+                    ₹<span th:text="${property.isSale ? (property.price)/60 : property.expectedRent}">0</span>/mo
+                </p>
+            </div>
+
+
+            <div style="flex:1; border:1px solid #ddd; border-radius:6px; padding:8px; text-align:center;">
+                <p style="margin:0; font-size:14px; font-weight:bold; color:#222;">
+                    <span th:text="${property.builtUpArea}">0</span> sqft
+                </p>
+                <p style="margin:0; font-size:12px; color:#555;">Built-up Area</p>
+            </div>
+        </div>
+        <div style="display:flex; gap:12px;">
+            <div style="width:calc(100% / 3); height:200px; border-radius:6px; overflow:hidden; background:#f5f5f5; position:relative;"
+                 onmouseover="startImageRotation(this)"
+                 onmouseout="stopImageRotation(this)">
+                <img th:src="${!#lists.isEmpty(property.photos) ? property.photos.iterator().next().imageUrl : 'https://via.placeholder.com/200x200'}"
+                     alt="Property Image"
+                     loading="lazy"
+                     decoding="async"
+                     style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; transition:opacity 0.1s ease;" />
+                <img th:each="photo,stat : ${property.photos}"
+                     th:if="${stat.index > 0 and stat.index < 4}"
+                     th:src="${photo.imageUrl}"
+                     alt="Property Image"
+                     loading="lazy"
+                     decoding="async"
+                     style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; opacity:0; transition:opacity 0.5s ease;" />
+            </div>
+            <div style="flex:2; display:flex; flex-direction:column; justify-content:space-between; height:200px;">
+                <div style="display:flex; gap:10px;">
+                    <div style="flex:1; border:1px solid #ddd; padding:10px; border-radius:6px; display:flex; align-items:center; justify-content:center; gap:8px;">
+                        <div style="font-size:16px;">🧭</div>
+                        <div style="text-align:center;">
+                            <p style="margin:0; font-size:14px; font-weight:bold;" th:text="${property.facing}">East</p>
+                            <p style="margin:0; font-size:11px; color:#777;">Facing</p>
+                        </div>
+                    </div>
+                    <div style="flex:1; border:1px solid #ddd; padding:10px; border-radius:6px; display:flex; align-items:center; justify-content:center; gap:8px;">
+                        <div style="font-size:16px;">🏠</div>
+                        <div style="text-align:center;">
+                            <p style="margin:0; font-size:14px;" th:text="${property.apartmentType}">2 BHK</p>
+                            <p style="margin:0; font-size:11px; color:#777;">Type</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <div style="flex:1; border:1px solid #ddd; padding:10px; border-radius:6px; display:flex; align-items:center; justify-content:center; gap:8px;">
+                        <div style="font-size:16px;">🚿</div>
+                        <div style="text-align:center;">
+                            <p style="margin:0; font-size:14px;" th:text="${property.amenity != null ? property.amenity.bathrooms : '-'}">2</p>
+                            <p style="margin:0; font-size:11px; color:#777;">Bathrooms</p>
+                        </div>
+                    </div>
+                    <div style="flex:1; border:1px solid #ddd; padding:10px; border-radius:6px; display:flex; align-items:center; justify-content:center; gap:8px;">
+                        <div style="font-size:16px;">🅿️</div>
+                        <div style="text-align:center;">
+                            <p style="margin:0; font-size:14px;" th:text="${property.parking}">Car/Bike</p>
+                            <p style="margin:0; font-size:11px; color:#777;">Parking</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
+                    <a th:href="@{/checkSubscribe(propertyId=${property.propertyId})}"
+                       style="padding:10px 16px; background:orangered; color:white; text-decoration:none; border-radius:6px; font-size:14px; font-weight:500;">
+                        Get Owner Details
+                    </a>
+                    <div style="display:flex; gap:12px; align-items:center;">
+                        <button th:id="'bookmark-btn-' + ${property.propertyId}"
+                                th:data-property-id="${property.propertyId}"
+                                onclick="toggleBookmark(this)"
+                                th:style="${bookmarkedProperties != null and bookmarkedProperties.contains(property.propertyId)} ? 'color:red;' : 'color:#ccc;'"
+                                style="background:none; border:none; cursor:pointer; font-size:20px; transition:color 0.3s ease;"
+                                title="Bookmark this property">
+                            ♥
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="trigger-point" th:if="${hasNext}"></div>
+</div>
+
+
+
+
+<script>
+    function toggleBookmark(button) {
+        const propertyId = button.getAttribute('data-property-id');
+
+        console.log("HIIIII")
+
+        fetch(`/toggleBookmark/${propertyId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(res => {
+                if (!res.ok) throw new Error("Network response was not ok");
+                return res.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Toggle heart color based on bookmark status
+                    if (data.bookmarked) {
+                        button.style.color = 'red';
+                    } else {
+                        button.style.color = '#ccc';
+                    }
+                } else {
+                    alert("Failed to update bookmark");
+                }
+            })
+            .catch(err => {
+                console.error("Bookmark error:", err);
+                alert("Something went wrong while bookmarking.");
+            });
+    }
+</script>

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - NoBroker</title>
+    <link rel="icon" type="image/png" href="/images/nobroker-favicon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 420px;
+            padding: 40px 35px;
+            position: relative;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #666;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #e74c3c;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: #e74c3c;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .form-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .house-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            background: #ffd700;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .login-subtitle {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .benefits {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .benefits li {
+            padding: 8px 0;
+            color: #666;
+            font-size: 14px;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .benefits li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #27ae60;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .phone-section {
+            margin-bottom: 20px;
+        }
+
+        .phone-label {
+            display: block;
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .phone-input-container {
+            position: relative;
+            display: flex;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: border-color 0.3s ease;
+        }
+
+        .phone-input-container:focus-within {
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+
+        .country-code {
+            background: #f8f9fa;
+            border: none;
+            padding: 14px 12px;
+            font-size: 14px;
+            color: #333;
+            border-right: 1px solid #ddd;
+            min-width: 70px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .flag-icon {
+            width: 20px;
+            height: 15px;
+            background: linear-gradient(to bottom, #ff9933 33%, white 33%, white 66%, #138808 66%);
+            border-radius: 2px;
+        }
+
+        .phone-input {
+            flex: 1;
+            border: none;
+            padding: 14px 15px;
+            font-size: 14px;
+            outline: none;
+            background: white;
+        }
+
+        .phone-input::placeholder {
+            color: #999;
+        }
+
+        .continue-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #ff6b6b, #e74c3c);
+            border: none;
+            color: white;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .continue-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.3);
+        }
+
+        .continue-btn:active {
+            transform: translateY(0);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .divider::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #ddd;
+            z-index: 1;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .google-btn {
+            width: 100%;
+            background: white;
+            border: 2px solid #ddd;
+            color: #333;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .google-btn:hover {
+            border-color: #4285f4;
+            box-shadow: 0 4px 15px rgba(66, 133, 244, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .google-icon {
+            width: 18px;
+            height: 18px;
+            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAxOCAxOCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KPHBhdGggZD0iTTE3LjY0IDkuMjA0NTQ1YzAtLjYzODE4Mi0uMDU3MjczLTEuMjUxODE4LS4xNjQ1NDUtMS44NDA5MDlIOXY0LjQ4ODE4MWg0Ljg0MzYzNmMtLjIwOTUgMS4wMjU0NTQtLjg0NjM2MyAxLjc5NDA5MS0xLjgwNDUgMi4zNTIyNzN2MS44NjQ1NDVoMi45OTQ1NDVDMTYuMDMxODE4IDEzLjM0IDkuMjA0NTQ1IDExLjU4MTgxOCAxNy42NCA5LjIwNDU0NXoiIGZpbGw9IiM0Mjg1RjQiLz4KPHBhdGggZD0iTTkgMThjMi40MzE4MTggMCA0LjQ2NzI3My0uNzkwOTA5IDUuOTU2MzY0LTIuMTU5MDkxbC0yLjkxOTA5MS0yLjI3N2MtLjgwNDU0NS41MzYzNjQtMS44MzYzNjQgLjgzNjM2NC0zLjAzNzI3MyAuODM2MzY0LTIuMzM2MzY0IDAtNC4zMTM2MzYtMS41NzI3MjctNS4wMjQwOTEtMy42NzIuMzJISC0yLjE1ODU0NlY3LjA2QzYuOTA0NTQ1IDEzLjQ3NDU0NSA5IDE4IDkgMTh6IiBmaWxsPSIjMzRBODUzIi8+CjxwYXRoIGQ9Ik0zLjk2ODE4MiAxMC44NUEzLjU3MjcgMy41NzI3IDAgMCAxIDMuODI5MDkxIDlBNS4zOTE4MiA1LjM5MTgyIDAgMCAxIDMuOTc2MzY0IDcuMTVsLTMuMTU5MDkxLTIuNDVBMTEuMDAwOTEgMTEuMDAwOTEgMCAwIDAgMS4wMjI3MjcgMTM1NTUgMTEuMDAwOTEgMTEuMDAwOTEgMCAwIDAgMS4wMjI3MjcgMTMuNDE4MTg=') no-repeat center;
+            background-size: contain;
+        }
+
+        .terms {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .terms a {
+            color: #e74c3c;
+            text-decoration: none;
+        }
+
+        .terms a:hover {
+            text-decoration: underline;
+        }
+
+        .input-error {
+            border-color: #e74c3c !important;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1) !important;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 25px;
+                margin: 10px;
+            }
+
+            .form-title {
+                font-size: 18px;
+            }
+
+            .continue-btn, .google-btn {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <button class="close-btn" onclick="closeModal()">&times;</button>
+
+    <div class="logo-section">
+        <a href="#" class="logo">
+            <div class="logo-icon">⌂</div>
+            NOBROKER
+        </a>
+    </div>
+
+    <div class="form-header">
+        <div class="house-icon">🏠</div>
+        <h2 class="form-title">Enter phone to continue</h2>
+    </div>
+
+    <div class="login-subtitle">Login / Sign up</div>
+
+    <ul class="benefits">
+        <li>Zero Brokerage.</li>
+        <li>Thousands of new listings daily.</li>
+        <li>100 Cr+ Brokerage saved monthly.</li>
+
+        <form id="loginForm" th:action="@{/send-otp}" method="post">
+            <div class="phone-section">
+                <label for="phone" class="phone-label">Phone Number</label>
+                <div class="phone-input-container" id="phoneContainer">
+                    <div class="country-code">
+                        <div class="flag-icon"></div>
+                        +91
+                    </div>
+                    <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            class="phone-input"
+                            placeholder="Enter Mobile Number"
+                            maxlength="10"
+                            th:value="${phone}"
+                    />
+                </div>
+                <div class="error-message" id="phoneError">Please enter a valid 10-digit mobile number</div>
+                <div id="otpSection" style="display: none; margin-top: 20px;">
+                    <label for="otp" class="phone-label">Enter OTP</label>
+                    <input type="text" id="otp" name="otp" class="phone-input" maxlength="6" placeholder="Enter OTP" />
+                    <div class="error-message" id="otpError">Invalid OTP</div>
+                    <button type="button" class="continue-btn" id="verifyBtn">Verify OTP</button>
+                </div>
+            </div>
+
+            <button type="submit" class="continue-btn" id="continueBtn">
+                Continue
+            </button>
+        </form>
+
+        <div class="divider">
+            <span>OR</span>
+        </div>
+
+        <button class="google-btn" onclick="continueWithGoogle()">
+            <div class="google-icon"></div>
+            Continue with Google
+        </button>
+
+        <div class="terms">
+            By continuing, you agree to our
+            <a href="#" th:href="@{/terms}">Terms & Conditions</a>
+        </div>
+</div>
+
+<script th:inline="javascript">
+    const phoneInput = document.getElementById('phone');
+    const otpInput = document.getElementById('otp');
+    const continueBtn = document.getElementById('continueBtn');
+    const verifyBtn = document.getElementById('verifyBtn');
+    const otpSection = document.getElementById('otpSection');
+    const phoneError = document.getElementById('phoneError');
+    const otpError = document.getElementById('otpError');
+
+    function validatePhone() {
+        const phone = phoneInput.value;
+        return phone.length === 10 && /^[6-9][0-9]{9}$/.test(phone);
+    }
+
+    function continueWithGoogle() {
+        window.location.href = "/oauth2/authorization/google";
+    }
+
+    continueBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        if (!validatePhone()) {
+            phoneError.style.display = 'block';
+            return;
+        } else {
+            phoneError.style.display = 'none';
+        }
+
+        continueBtn.innerHTML = 'Sending OTP...';
+        continueBtn.disabled = true;
+
+        fetch('/send-otp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ mobilePhone: phoneInput.value })
+        })
+            .then(res => res.text())
+            .then(data => {
+                console.log(data);
+                otpSection.style.display = 'block';
+                continueBtn.innerHTML = 'Resend OTP';
+                continueBtn.disabled = false;
+            });
+    });
+
+    verifyBtn.addEventListener('click', function () {
+        const otp = otpInput.value;
+
+        if (!otp || otp.length !== 6) {
+            otpError.style.display = 'block';
+            return;
+        } else {
+            otpError.style.display = 'none';
+        }
+
+        fetch('/verify-otp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                mobilePhone: phoneInput.value,
+                otp: otp
+            })
+        })
+            .then(res => {
+                if (res.redirected) {
+                    window.location.href = res.url; // Redirect if successful
+                } else {
+                    return res.text(); // Get error if any
+                }
+            })
+            .then(text => {
+                if (text && text.includes("Invalid OTP")) {
+                    otpError.innerText = "Invalid OTP";
+                    otpError.style.display = 'block';
+                }
+            });
+    });
+</script>
+</body>
+</html>

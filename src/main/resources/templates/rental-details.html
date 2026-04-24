@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" th:href="@{/css/app.css}" />
+    <title>Post Property - Rental Details</title>
+    <link rel="icon" type="image/png" href="/images/nobroker-favicon.png">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+        }
+
+        /* HEADER STYLES */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+            z-index: 1000;
+            height: 60px;
+        }
+
+        .left-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+
+        .brand-name {
+            font-weight: bold;
+            font-size: 20px;
+            color: #1f2937;
+        }
+
+        .right-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .pay-rent, .post-property {
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .pay-rent {
+            background-color: transparent;
+            border: 1px solid #d1d5db;
+            color: #374151;
+        }
+
+        .pay-rent:hover {
+            background-color: #f9fafb;
+        }
+
+        .post-property {
+            background-color: #10b981;
+            color: #fff;
+            border: none;
+        }
+
+        .post-property:hover {
+            background-color: #059669;
+        }
+
+        .profile {
+            background-color: #f3f4f6;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            margin-top: 60px;
+            width: 280px;
+            background-color: #fff;
+            border-right: 1px solid #e5e7eb;
+            height: calc(100vh - 60px);
+            position: fixed;
+        }
+
+        .progress-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .progress-text {
+            font-weight: 600;
+            color: #10b981;
+            font-size: 14px;
+        }
+
+        .preview-btn {
+            background: transparent;
+            border: 1px solid #10b981;
+            color: #10b981;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .nav-steps {
+            list-style: none;
+        }
+
+        .nav-step {
+            display: flex;
+            align-items: center;
+            padding: 16px 24px;
+
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-step:hover {
+            background-color: #f9fafb;
+        }
+
+        .nav-step.active {
+            background-color: #ecfdf5;
+            border-left-color: #10b981;
+        }
+
+        .nav-step.active .step-text {
+            color: #10b981;
+            font-weight: 500;
+        }
+
+        .step-icon {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .step-text {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        /* MAIN FORM CONTENT */
+        .main-content {
+            margin-top: 60px;
+            margin-left: 280px;
+            padding: 32px;
+            flex: 1;
+            min-height: calc(100vh - 60px);
+        }
+
+        .form-section {
+            max-width: 800px;
+            background-color: #fff;
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .form-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #10b981;
+            margin-bottom: 8px;
+        }
+
+        .form-subtitle {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 32px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+            flex: 1;
+        }
+
+        .form-group.full-width {
+            flex: 1 1 100%;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .required {
+            color: #ef4444;
+        }
+
+        /* Radio buttons */
+        .radio-group {
+            display: flex;
+            gap: 24px;
+            margin-top: 8px;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .radio-item input[type="radio"] {
+            margin: 0;
+        }
+
+        /* Input fields */
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+            background-color: #fff;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Checkbox */
+        .checkbox-group {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .checkbox-item:hover {
+            border-color: #10b981;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            margin: 0;
+            width: auto;
+        }
+
+        /* Select styling */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 12px center;
+            background-repeat: no-repeat;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
+        /* Action buttons */
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .back-btn, .submit-btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .back-btn {
+            background-color: #f3f4f6;
+            color: #6b7280;
+            border: 1px solid #d1d5db;
+        }
+
+        .back-btn:hover {
+            background-color: #e5e7eb;
+        }
+
+        .submit-btn {
+            background-color: #10b981;
+            color: white;
+            border: none;
+        }
+
+        .submit-btn:hover {
+            background-color: #059669;
+        }
+
+        /* Currency symbol */
+        .currency-input {
+            position: relative;
+        }
+
+        .currency-input::before {
+            content: '₹';
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .currency-input input {
+            padding-left: 32px;
+        }
+        #chat-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ff5a5f;
+            color: white;
+            padding: 12px 14px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 999;
+        }
+
+        #chatbox {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 300px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            z-index: 1000;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 10px;
+            background-color: #ff5a5f;
+            font-weight: bold;
+        }
+
+        .chat-title {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .chat-messages {
+            padding: 10px;
+            height: 250px;
+            overflow-y: auto;
+            font-size: 14px;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 8px;
+            border-top: 1px solid #ccc;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .chat-input button {
+            margin-left: 8px;
+            background: #ff5a5f;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="main-header">
+    <div th:replace="~{fragments/header :: header}"></div>
+</header>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <div class="progress-header">
+        <span class="progress-text">40% Done</span>
+    </div>
+    <ul class="nav-steps">
+        <li class="nav-step">
+            <span class="step-icon">🏠</span>
+            <span class="step-text">Property Details</span>
+        </li>
+        <li class="nav-step">
+            <span class="step-icon">📍</span>
+            <span class="step-text">Locality Details</span>
+        </li>
+        <li class="nav-step active">
+            <span class="step-icon">💰</span>
+            <span class="step-text">Rental Details</span>
+        </li>
+        <li class="nav-step">
+            <span class="step-icon">🎯</span>
+            <span class="step-text">Amenities</span>
+        </li>
+        <li class="nav-step">
+            <span class="step-icon">📷</span>
+            <span class="step-text">Gallery</span>
+        </li>
+
+    </ul>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+    <div class="form-section">
+        <h2 class="form-title">Provide rental details about your property</h2>
+
+        <form th:action="${editMode} ? @{/edit/rentals} : @{/rentalDetails}"
+              th:object="${rentalDto}" method="post">
+            <!-- Property available for -->
+            <div class="form-group">
+
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" th:field="*{isSale}" value="false" id="only-rent" required />
+                        <label for="only-rent">Only rent</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" th:field="*{isSale}" value="true" id="only-lease" />
+                        <label for="only-lease">Sale</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expected Rent & Deposit -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Expected Rent <span class="required"></span></label>
+                    <div class="currency-input">
+                        <input type="number" th:field="*{expectedRent}" placeholder="Enter Amount" />
+                    </div>
+                    <small style="color: #6b7280; font-size: 12px;">/ Month</small>
+                </div>
+                <div class="form-group">
+                    <label>Expected Deposit <span class="required">*</span></label>
+                    <div class="currency-input">
+                        <input type="number" th:field="*{expectedDeposit}" placeholder="Enter Amount" min="0" required />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Price for Sale<span class="required"></span></label>
+                    <div class="currency-input">
+                        <input type="number" th:field="*{price}" placeholder="Enter Amount"/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rent Negotiable -->
+            <div class="form-group">
+                <label>Rent Negotiable</label>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" th:field="*{negotiation}" id="negotiable" />
+                        <label for="negotiable">Negotiable</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monthly Maintenance -->
+            <div class="form-group">
+                <label>Monthly Maintenance</label>
+                <select th:field="*{monthlyMaintenance}">
+                    <option value="" selected>Select</option>
+                    <option value="included">Included in Rent</option>
+                    <option value="extra_500">Extra ₹500</option>
+                    <option value="extra_1000">Extra ₹1000</option>
+                    <option value="extra_1500">Extra ₹1500</option>
+                    <option value="extra_2000">Extra ₹2000</option>
+                    <option value="custom">Custom Amount</option>
+                </select>
+            </div>
+
+            <!-- Available From -->
+            <div class="form-group">
+                <label>Available From <span class="required">*</span></label>
+                <input type="date" th:field="*{availableFrom}" required />
+            </div>
+
+            <!-- Preferred Tenants -->
+            <div class="form-group">
+                <label>Preferred Tenants <span class="required">*</span></label>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" th:field="*{preferredTenets}" value="Anyone" id="anyone" />
+                        <label for="anyone">Anyone</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" th:field="*{preferredTenets}" value="Family" id="family" />
+                        <label for="family">Family</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" th:field="*{preferredTenets}" value="Bachelor Female" id="bachelor-female" />
+                        <label for="bachelor-female">Bachelor Female</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" th:field="*{preferredTenets}" value="Bachelor Male" id="bachelor-male" />
+                        <label for="bachelor-male">Bachelor Male</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" th:field="*{preferredTenets}" value="Company" id="company" />
+                        <label for="company">Company</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Furnishing & Parking -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Furnishing <span class="required">*</span></label>
+                    <select th:field="*{furnishing}" required>
+                        <option value="" selected>Select</option>
+                        <option value="Fully Furnished">Fully Furnished</option>
+                        <option value="Semi Furnished">Semi Furnished</option>
+                        <option value="Unfurnished">Unfurnished</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Parking <span class="required">*</span></label>
+                    <select th:field="*{parking}" required>
+                        <option value="" selected>Select</option>
+                        <option value="Bike">Bike</option>
+                        <option value="Car">Car</option>
+                        <option value="Both">Both</option>
+                        <option value="None">None</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="form-group full-width">
+                <label>Description</label>
+                <textarea th:field="*{description}" placeholder="Write a few lines about your property something which is special and makes your property stand out. Please do not mention your contact details in any format."></textarea>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <!--<button type="button" class="back-btn" onclick="window.location.href=
+                '/propertyDetails'">Back</button> -->
+                <button type="submit" class="submit-btn">Save & Continue</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Chat Widget -->
+<div id="chat-icon" onclick="toggleChatbox()">
+    <img src="https://assets.nobroker.in/nb-new/public/Common/chatLightBg.svg" alt="Chat"
+         style="width: 40px; height: 40px;">
+</div>
+
+<div id="chatbox" style="display: none;">
+    <div class="chat-header">
+        <img src="/images/ai_bot.png" width="70px" height="70px">
+        <div class="chat-title">
+            <div>Natasha</div>
+            <div>Your AI Assistant</div>
+        </div>
+    </div>
+    <div class="chat-messages" id="chat-messages" style="white-space: pre-line;"></div>
+    <div class="chat-input">
+        <input type="text" id="user-message" placeholder="Ask your question here.." />
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+<script>
+    function toggleChatbox() {
+        const chatbox = document.getElementById('chatbox');
+        chatbox.style.display = (chatbox.style.display === 'none') ? 'block' : 'none';
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('user-message');
+        const message = input.value.trim();
+        if (message === '') return;
+
+        appendMessage("You", message);
+        input.value = '';
+
+        fetch('/chatbot', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message })
+        })
+            .then(res => res.text())
+            .then(data => {
+                appendMessage("AI", data);
+            })
+            .catch(() => {
+                appendMessage("AI", "Sorry, something went wrong.");
+            });
+    }
+
+    function appendMessage(sender, text) {
+        const msgDiv = document.getElementById('chat-messages');
+        msgDiv.innerHTML += `<p><strong>${sender}:</strong> ${text}</p>`;
+        msgDiv.scrollTop = msgDiv.scrollHeight;
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" th:href="@{/css/app.css}" />
+    <title>Post Property - Property Details</title>
+    <link rel="icon" type="image/png" href="/images/nobroker-favicon.png">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+        }
+
+        /* HEADER STYLES - Updated to match NoBroker style */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+            z-index: 1000;
+            height: 60px;
+        }
+
+
+        .left-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+
+        .brand-name {
+            font-weight: bold;
+            font-size: 20px;
+            color: #1f2937;
+        }
+
+        .right-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .pay-rent, .post-property {
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .pay-rent {
+            background-color: transparent;
+            border: 1px solid #d1d5db;
+            color: #374151;
+        }
+
+        .pay-rent:hover {
+            background-color: #f9fafb;
+        }
+
+        .post-property {
+            background-color: #10b981;
+            color: #fff;
+            border: none;
+        }
+
+        .post-property:hover {
+            background-color: #059669;
+        }
+
+        .profile {
+            background-color: #f3f4f6;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .btn-outline {
+            border: 1px solid #ccc;
+            background-color: white;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .btn-filled {
+            background-color: #009587;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .new-badge {
+            background-color: #ffb300;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: -8px;
+            margin-right: 4px;
+        }
+
+        .new-label {
+            font-size: 10px;
+            color: white;
+            background-color: #009587;
+            border-radius: 8px;
+            padding: 2px 5px;
+            font-weight: bold;
+            position: absolute;
+            top: -5px;
+            right: -10px;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .profile-icon {
+            background-color: #ccc;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-name {
+            font-size: 14px;
+            font-weight: normal;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .menu-icon {
+            font-size: 18px;
+            margin-left: 10px;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            margin-top: 60px;
+            width: 280px;
+            background-color: #fff;
+            border-right: 1px solid #e5e7eb;
+            height: calc(100vh - 60px);
+            position: fixed;
+        }
+
+        .progress-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .progress-text {
+            font-weight: 600;
+            color: #10b981;
+            font-size: 14px;
+        }
+
+        .preview-btn {
+            background: transparent;
+            border: 1px solid #10b981;
+            color: #10b981;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .nav-steps {
+            list-style: none;
+        }
+
+        .nav-step {
+            display: flex;
+            align-items: center;
+            padding: 16px 24px;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-step:hover {
+            background-color: #f9fafb;
+        }
+
+        .nav-step.active {
+            background-color: #ecfdf5;
+            border-left-color: #10b981;
+        }
+
+        .nav-step.active .step-text {
+            color: #10b981;
+            font-weight: 500;
+        }
+
+        .step-icon {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .step-text {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        /* MAIN FORM CONTENT */
+        .main-content {
+            margin-top: 60px;
+            margin-left: 280px;
+            padding: 40px;
+            flex: 1;
+            min-height: calc(100vh - 60px);
+            background-color: #f8f9fa;
+        }
+
+        .form-section {
+            max-width: 900px;
+            background-color: #fff;
+            padding: 0;
+            border-radius: 0;
+            box-shadow: none;
+            border: 1px solid #e5e7eb;
+        }
+
+        .form-header {
+            background-color: #f8f9fa;
+            padding: 20px 30px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .form-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #10b981;
+            margin: 0;
+        }
+
+        .form-content {
+            padding: 30px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 25px;
+        }
+
+        .form-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .form-group.half-width {
+            flex: 0 0 calc(50% - 15px);
+        }
+
+        .form-group.full-width {
+            flex: 1 1 100%;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .required {
+            color: #ef4444;
+        }
+
+        /* Input fields */
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+            background-color: #fff;
+            color: #333;
+        }
+
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.1);
+        }
+
+        input[type="text"]::placeholder {
+            color: #aaa;
+            font-style: italic;
+        }
+
+        /* Select styling */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23666' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 15px center;
+            background-repeat: no-repeat;
+            background-size: 16px;
+            padding-right: 45px;
+        }
+
+        select option[disabled] {
+            color: #aaa;
+        }
+
+        /* Area input styling */
+        .area-input {
+            position: relative;
+        }
+
+        .area-input input {
+            padding-right: 60px;
+        }
+
+        .area-unit {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            font-size: 13px;
+            pointer-events: none;
+            background-color: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 3px;
+            border: 1px solid #e5e7eb;
+        }
+
+        /* Action buttons */
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 40px;
+            padding-top: 0;
+            border-top: none;
+        }
+
+        .submit-btn {
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            background-color: #10b981;
+            color: white;
+            border: none;
+        }
+
+        .submit-btn:hover {
+            background-color: #059669;
+        }
+
+        #chat-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ff5a5f;
+            color: white;
+            padding: 12px 14px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 999;
+        }
+
+        #chatbox {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 300px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            z-index: 1000;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 10px;
+            background-color: #ff5a5f;
+            font-weight: bold;
+        }
+
+        .chat-title {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .chat-messages {
+            padding: 10px;
+            height: 250px;
+            overflow-y: auto;
+            font-size: 14px;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 8px;
+            border-top: 1px solid #ccc;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .chat-input button {
+            margin-left: 8px;
+            background: #ff5a5f;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="main-header">
+    <div th:replace="~{fragments/header :: header}"></div>
+</header>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <div class="progress-header">
+        <span class="progress-text">0% Done</span>
+    </div>
+    <ul class="nav-steps">
+        <li class="nav-step active">
+            <span class="step-icon">🏠</span>
+            <span class="step-text">Property Details</span>
+        </li>
+        <li class="nav-step">
+            <span class="step-icon">📍</span>
+            <span class="step-text">Locality Details</span>
+        </li>
+        <li class="nav-step">
+            <span class="step-icon">💰</span>
+            <span class="step-text">Rental Details</span>
+        </li>
+        <li class="nav-step">
+            <span class="step-icon">🎯</span>
+            <span class="step-text">Amenities</span>
+        </li>
+        <li class="nav-step">
+            <span class="step-icon">📷</span>
+            <span class="step-text">Gallery</span>
+        </li>
+
+    </ul>
+</div>
+
+<div class="main-content">
+
+    <div class="form-section">
+        <div style="color:green; font-size:18px;" th:if="${message}" class="alert alert-success"
+             th:text="${message}"></div>
+        <div class="form-header">
+            <h2 class="form-title">Property Details</h2>
+        </div>
+
+        <div class="form-content">
+            <form th:action="${editMode} ? @{/edit/propertyDetails} : @{/propertyDetails}"
+                  th:object="${property}" method="post">
+                <!-- Apartment Type and Name -->
+                <div class="form-row">
+                    <div class="form-group half-width">
+                        <label>Apartment Type<span class="required">*</span></label>
+                        <select th:field="*{apartmentType}" required>
+                            <option value="" >Select Apartment</option>
+                            <option value="Apartment">Apartment</option>
+                            <option value="Gated Community">Gated Community</option>
+                            <option value="Villa">Villa</option>
+                        </select>
+                    </div>
+                    <div class="form-group half-width">
+                        <label>Apartment Name <span class="required">*</span></label>
+                        <input type="text" th:field="*{apartmentName}" placeholder="e.g. Name" required />
+                    </div>
+                </div>
+
+                <!-- BHK, Floor, Total Floor -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>BHK Type<span class="required">*</span></label>
+                        <select th:field="*{bhkType}" required>
+                            <option value="" selected>Select</option>
+                            <option value="1">1 BHK</option>
+                            <option value="2">2 BHK</option>
+                            <option value="3">3 BHK</option>
+                            <option value="4">4 BHK</option>
+                            <option value="5">4 BHK +</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Floor<span class="required">*</span></label>
+                        <select th:field="*{floor}" required>
+                            <option value="" selected>Select</option>
+                            <option value="0">Ground</option>
+                            <option value="1">1st Floor</option>
+                            <option value="2">2nd Floor</option>
+                            <option value="3">3rd Floor</option>
+                            <option value="4">4+ Floor</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Total Floor<span class="required">*</span></label>
+                        <select th:field="*{totalFloors}" required>
+                            <option value="" selected>Select</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4+</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Property Age and Facing -->
+                <div class="form-row">
+                    <div class="form-group half-width">
+                        <label>Property Age<span class="required">*</span></label>
+                        <select th:field="*{propertyAge}" required>
+                            <option value="" selected>Select</option>
+                            <option value="1">Less than 1 year</option>
+                            <option value="2">1 to 3 years</option>
+                            <option value="3">3 to 5 years</option>
+                            <option value="4">5 to 10 years</option>
+                            <option value="5">10+ years</option>
+                        </select>
+                    </div>
+                    <div class="form-group half-width">
+                        <label>Facing<span class="required">*</span></label>
+                        <select th:field="*{facing}" required>
+                            <option value="" selected>Select</option>
+                            <option value="East">East</option>
+                            <option value="West">West</option>
+                            <option value="North">North</option>
+                            <option value="South">South</option>
+                            <option value="North-East">North-East</option>
+                            <option value="North-West">North-West</option>
+                            <option value="South-East">South-East</option>
+                            <option value="South-West">South-West</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Built Up Area -->
+                <div class="form-row">
+                    <div class="form-group half-width">
+                        <label>Built Up Area<span class="required">*</span></label>
+                        <div class="area-input">
+                            <input type="text" th:field="*{builtUpArea}" placeholder="45354" required />
+                            <span class="area-unit">Sq.ft</span>
+                        </div>
+                    </div>
+                    <div class="form-group half-width">
+                        <label>Property Status<span class="required">*</span></label>
+                        <select th:field="*{propertyStatus}" required>
+                            <option value="" selected>Select</option>
+                            <option value="Under Construction">Under Construction</option>
+                            <option value="Ready">Ready</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">Save & Continue</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+<div id="chat-icon" onclick="toggleChatbox()">
+    <img src="https://assets.nobroker.in/nb-new/public/Common/chatLightBg.svg" alt="Chat"
+         style="width: 40px; height: 40px;">
+</div>
+
+<div id="chatbox" style="display: none;">
+    <div class="chat-header">
+        <img src="/images/ai_bot.png" width="70px" height="70px">
+        <div class="chat-title">
+            <div>Natasha</div>
+            <div>Your AI Assistant</div>
+        </div>
+    </div>
+    <div class="chat-messages" id="chat-messages" style="white-space: pre-line;"></div>
+    <div class="chat-input">
+        <input type="text" id="user-message" placeholder="Ask your question here.." />
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+</body>
+<script>
+    function toggleChatbox() {
+        const chatbox = document.getElementById('chatbox');
+        chatbox.style.display = (chatbox.style.display === 'none') ? 'block' : 'none';
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('user-message');
+        const message = input.value.trim();
+        if (message === '') return;
+
+        appendMessage("You", message);
+        input.value = '';
+
+        fetch('/chatbot', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message })
+        })
+            .then(res => res.text())
+            .then(data => {
+                appendMessage("AI", data);
+            })
+            .catch(() => {
+                appendMessage("AI", "Sorry, something went wrong.");
+            });
+    }
+
+    function appendMessage(sender, text) {
+        const msgDiv = document.getElementById('chat-messages');
+        msgDiv.innerHTML += `<p><strong>${sender}:</strong> ${text}</p>`;
+        msgDiv.scrollTop = msgDiv.scrollHeight;
+    }
+</script>
+</html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoBroker Pricing Plans</title>
+    <link rel="icon" type="image/png" href="/images/nobroker-favicon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .pricing-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .plan-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        .plan-card.freedom {
+            border-color: #20b2aa;
+        }
+
+        .plan-card.relax {
+            border-color: #4682b4;
+        }
+
+        .plan-card.moneyback {
+            border-color: #ff6b6b;
+        }
+
+        .plan-card.super-relax {
+            border-color: #8b4c8b;
+        }
+
+        .plan-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .plan-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .plan-pricing {
+            margin-bottom: 20px;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        .current-price {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .gst-text {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .plan-description {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        .manager-section {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .manager-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 18px;
+        }
+
+        .manager-info h4 {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .manager-details {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.3;
+        }
+
+        .features-section {
+            margin-bottom: 25px;
+        }
+
+        .features-header {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .feature-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+
+        .feature-name {
+            color: #555;
+        }
+
+        .feature-value {
+            color: #333;
+            font-weight: 500;
+        }
+
+        .feature-check {
+            color: #28a745;
+            font-size: 18px;
+        }
+
+        .feature-cross {
+            color: #dc3545;
+            font-size: 18px;
+        }
+
+        .subscribe-form {
+            width: 100%;
+        }
+
+        .subscribe-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-freedom {
+            background: linear-gradient(135deg, #20b2aa, #17a2b8);
+            color: white;
+        }
+
+        .btn-relax {
+            background: linear-gradient(135deg, #4682b4, #5a9bd4);
+            color: white;
+        }
+
+        .btn-moneyback {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+        }
+
+        .btn-super-relax {
+            background: linear-gradient(135deg, #8b4c8b, #a569bd);
+            color: white;
+        }
+
+        .subscribe-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .validity-info {
+            text-align: center;
+            margin: 30px 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .owner-plans-link {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .owner-plans-link a {
+            color: #666;
+            text-decoration: underline;
+            font-size: 16px;
+        }
+
+        .owner-plans-link a:hover {
+            color: #333;
+        }
+
+        .contact-info {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .contact-info a {
+            color: #e74c3c;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .how-it-works {
+            text-align: center;
+            margin: 50px 0;
+            color: #666;
+            font-size: 24px;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .badge {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .field-assistance {
+            background: #ffc107;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .pricing-container {
+                grid-template-columns: 1fr;
+            }
+
+            .plan-card {
+                padding: 20px;
+            }
+
+            .plan-name {
+                font-size: 20px;
+            }
+
+            .current-price {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="pricing-container">
+        <!-- Freedom Plan (Static) -->
+        <div class="plan-card freedom">
+            <div class="plan-header">
+                <h2 class="plan-name">Freedom Plan</h2>
+                <div class="plan-pricing">
+                    <span class="original-price">₹ 2,149</span>
+                    <span class="current-price">₹ 1,649</span>
+                    <div class="gst-text">+18% GST</div>
+                </div>
+                <p class="plan-description">
+                    Get genuine house owner contacts matching your requirements
+                </p>
+            </div>
+
+            <div class="manager-section">
+                <div class="manager-avatar">RM</div>
+                <div class="manager-info">
+                    <h4>Complete Relocation Assistance on Call</h4>
+                    <div class="manager-details">
+                        • Free Customized Packer and Mover Quote<br>
+                        • Free Rental Agreement consultation with expert<br>
+                        • On-Demand Support
+                    </div>
+                </div>
+            </div>
+
+            <div class="features-section">
+                <h3 class="features-header">Premium Filters</h3>
+                <div class="feature-item">
+                    <span class="feature-name">Number of Contacts</span>
+                    <span class="feature-value">upto 25</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-name">Instant Property Alerts on SMS</span>
+                    <span class="feature-check">✓</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-name">Locality Experts</span>
+                    <span class="feature-cross">✗</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-name">Rent Negotiation</span>
+                    <span class="feature-cross">✗</span>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: center; margin-top: 24px;">
+                <button id="pay-btn"
+                        data-price="164900"
+                        style="
+                background-color: #2563eb;    /* Blue-600 */
+                color: white;
+                padding: 14px 28px;
+                font-size: 16px;
+                font-weight: 600;
+                border: none;
+                border-radius: 10px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                transition: all 0.3s ease;
+            "
+                        onmouseover="this.style.backgroundColor='#1d4ed8'"
+                        onmouseout="this.style.backgroundColor='#2563eb'">
+                    Subscribe Now
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("pay-btn").addEventListener("click", function () {
+            const price = this.getAttribute("data-price");
+
+            fetch("/api/payment/create-checkout-session", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ price: price })
+            })
+                .then(async (res) => {
+                    const text = await res.text();
+                    if (!res.ok) {
+                        // Avoid redirecting to an error HTML page (which can produce Tomcat 400).
+                        throw new Error(text || ("Request failed: " + res.status));
+                    }
+                    return text;
+                })
+                .then(url => {
+                    window.location.href = url;
+                })
+                .catch(err => {
+                    console.error("Payment error:", err);
+                    alert("Payment initiation failed. Please try again.");
+                });
+        });
+    </script>
+
+</div>
+</body>
+</html>

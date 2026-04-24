@@ -1,0 +1,150 @@
+.nb-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ddd;
+  text-decoration: none;
+}
+
+.nb-header-left {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.nb-logo {
+  width: auto;
+  height: 35px;
+  max-width: 200px;
+  object-fit: contain;
+}
+
+.left-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 200px;
+}
+
+.nb-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nb-logo a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.nb-logo-icon {
+  width: 32px;
+  height: 32px;
+  background-color: #ff5a5f;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.nb-logo-text {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.nb-logo-text span {
+  color: #555;
+}
+
+.nb-logo-text strong {
+  color: #000;
+}
+
+.nb-header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.btn-outline {
+  border: 1px solid #ccc;
+  background-color: white;
+  padding: 5px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.nb-btn-filled {
+  background-color: #009587;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.new-badge {
+  background-color: #ffb300;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: -8px;
+  margin-right: 4px;
+}
+
+.new-label {
+  font-size: 10px;
+  color: white;
+  background-color: #009587;
+  border-radius: 8px;
+  padding: 2px 5px;
+  font-weight: bold;
+  margin-left: -10px;
+  margin-top: -10px;
+  position: absolute;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.profile-icon {
+  background-color: #ccc;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nb-profile-name {
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.menu-icon {
+  font-size: 18px;
+  margin-left: 10px;
+}

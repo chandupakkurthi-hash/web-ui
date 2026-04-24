@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" th:href="@{/css/app.css}" />
+    <link rel="stylesheet" th:href="@{/css/all-properties.css}" />
+    <title>NoBroker Clone</title>
+    <style th:remove="all">
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #f9f9f9;
+        }
+
+        /* HEADER */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+            z-index: 1000;
+            height: 60px;
+        }
+
+        .logo {
+            width: auto;
+            height: 30px;
+            max-width: 150px;
+            /* Adjust as needed */
+            object-fit: contain;
+            /* Prevents distortion */
+        }
+
+        .left-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 200px;
+            /* Ensures enough space for logo */
+        }
+
+
+
+        .left-section,
+        .right-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo {
+            width: 30px;
+            height: 30px;
+        }
+
+        .brand-name {
+            font-weight: bold;
+            font-size: 20px;
+            color: #000;
+        }
+
+        .menu-item {
+            cursor: pointer;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .pay-rent {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            color: #333;
+        }
+
+        .post-property {
+            background-color: #00aa9b;
+            color: #fff;
+        }
+
+        .pay-rent,
+        .post-property {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .profile {
+            padding: 5px 10px;
+            border-radius: 20px;
+            background-color: #e6e6e6;
+            font-size: 14px;
+        }
+
+        .icons span {
+            font-size: 18px;
+            margin: 0 4px;
+            cursor: pointer;
+        }
+
+        .menu {
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 5px;
+        }
+
+        .list-view,
+        .map-view {
+            padding: 6px 10px;
+            border-radius: 15px;
+            border: none;
+            background-color: #00aa9b;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* MAIN LAYOUT */
+        .content {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+            background: #f9f9f9;
+        }
+
+        /* SIDEBAR FILTERS */
+        .sidebar {
+            width: 340px;
+            background-color: white;
+            border-right: 1px solid #ddd;
+            flex-shrink: 0;
+            overflow-y: auto;
+            height: 100%;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .filter-tab {
+            flex: 1;
+            padding: 15px 20px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 500;
+            background: #f8f9fa;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .filter-tab.active {
+            background: white;
+            border-bottom: 3px solid #00aa9b;
+            color: #00aa9b;
+        }
+
+        .filter-tab:hover {
+            background: #e9ecef;
+        }
+
+        /* Filter Content */
+        .filter-content {
+            padding: 20px;
+        }
+
+        .filter-section {
+            margin-bottom: 25px;
+        }
+
+        .filter-section h4 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .bhk-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .bhk-options label {
+            flex: 1 1 45%;
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .bhk-options label:hover {
+            border-color: #00aa9b;
+            background: #f0fffe;
+        }
+
+        .bhk-options input[type="checkbox"]:checked+span,
+        .radio-group input[type="radio"]:checked+span {
+            color: #00aa9b;
+            font-weight: 600;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .radio-group label,
+        .checkbox-group label {
+            flex: 1 1 45%;
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .radio-group label:hover,
+        .checkbox-group label:hover {
+            border-color: #00aa9b;
+            background: #f0fffe;
+        }
+
+        .apply-filters-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #ff4c5b;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+
+        .apply-filters-btn:hover {
+            background-color: #e43e4d;
+        }
+
+        /* MAIN AREA */
+        .main-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f9f9f9;
+        }
+
+        /* Custom styles for range input thumbs */
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #007bff;
+            border-radius: 50%;
+            cursor: pointer;
+            pointer-events: all;
+            z-index: 4;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #007bff;
+            border-radius: 50%;
+            cursor: pointer;
+            pointer-events: all;
+            z-index: 4;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        input[type="range"]::-ms-thumb {
+            width: 20px;
+            height: 20px;
+            background: #007bff;
+            border-radius: 50%;
+            cursor: pointer;
+            pointer-events: all;
+            z-index: 4;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Ensure the track doesn't interfere with thumb interaction */
+        input[type="range"] {
+            pointer-events: none;
+            /* Disable pointer events on the track */
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            pointer-events: all;
+            /* Enable pointer events on the thumb */
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            pointer-events: all;
+            /* Enable pointer events on the thumb */
+        }
+
+        input[type="range"]::-ms-thumb {
+            pointer-events: all;
+            /* Enable pointer events on the thumb */
+        }
+
+
+
+        .properties-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .properties-header h2 {
+            margin: 0;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .sort-dropdown {
+            padding: 10px 15px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+        }
+
+        .properties-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Property Card Styles (keeping your existing styles) */
+        .property-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            max-width: 100%;
+            width: 100%;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            margin-bottom: 16px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .property-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Premium Filter Styles */
+        .premium-filter-content {
+            display: none;
+        }
+
+        .premium-filter-content.active {
+            display: block;
+        }
+
+        .premium-badge {
+            background: linear-gradient(45deg, #ffd700, #ffed4a);
+            color: #333;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-left: 8px;
+        }
+
+        input[type="checkbox"],
+        input[type="radio"] {
+            margin-right: 8px;
+            accent-color: #00aa9b;
+        }
+
+        #chat-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ff5a5f;
+            color: white;
+            padding: 12px 14px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 999;
+        }
+
+        #chatbox {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 300px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            z-index: 1000;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 10px;
+            background-color: #ff5a5f;
+            font-weight: bold;
+        }
+
+        .chat-title {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .chat-messages {
+            padding: 10px;
+            height: 250px;
+            overflow-y: auto;
+            font-size: 14px;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 8px;
+            border-top: 1px solid #ccc;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .chat-input button {
+            margin-left: 8px;
+            background: #ff5a5f;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="main-header">
+        <div th:replace="~{fragments/header :: header}"></div>
+    </header>
+
+
+    <div class="content" style="margin-top: 50px">
+        <div class="sidebar">
+            <div class="filter-tabs">
+                <div class="filter-tab active" onclick="switchTab('basic')">
+                    Filters
+                </div>
+                <div class="filter-tab" onclick="checkSubscriptionAndRedirect(event)">
+                    Premium Filters
+                    <span class="premium-badge">NEW</span>
+                </div>
+            </div>
+
+            <!-- Basic Filters -->
+            <div id="basic-filters" class="filter-content">
+                <form id="filterForm" method="get" action="/getProperties">
+                    <input type="hidden" name="type" th:value="${isSale}" />
+                    <input type="hidden" name="city" th:value="${city}" />
+                    <input type="hidden" name="query" th:value="${searchKeyword}" />
+                    <input type="hidden" name="filterType" value="basic" />
+
+                    <!-- BHK Type -->
+                    <div class="filter-section">
+                        <h4>BHK Type</h4>
+                        <div class="bhk-options">
+                            <div class="bhk-options" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                                <label style="flex: 1 1 45%;">
+                                    <input type="checkbox" name="bhkType" value="1"
+                                        th:checked="${bhkType != null and bhkType.contains(1)}" /> 1 BHK
+                                </label>
+                                <label style="flex: 1 1 45%;">
+                                    <input type="checkbox" name="bhkType" value="2"
+                                        th:checked="${bhkType != null and bhkType.contains(2)}" /> 2 BHK
+                                </label>
+                                <label style="flex: 1 1 45%;">
+                                    <input type="checkbox" name="bhkType" value="3"
+                                        th:checked="${bhkType != null and bhkType.contains(3)}" /> 3 BHK
+                                </label>
+                                <label style="flex: 1 1 45%;">
+                                    <input type="checkbox" name="bhkType" value="4"
+                                        th:checked="${bhkType != null and bhkType.contains(4)}" /> 4 BHK
+                                </label>
+                                <label style="flex: 1 1 45%;">
+                                    <input type="checkbox" name="bhkType" value="5"
+                                        th:checked="${bhkType != null and bhkType.contains(5)}" /> 4+ BHK
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rent Range Filter -->
+                    <!-- Rent Range Filter -->
+                    <div class="filter-section">
+                        <!--                    <h4>Rent Range: ₹<span id="minDisplay">0</span> to ₹<span id="maxDisplay">5,00,000</span></h4>-->
+
+                        <!--                    <h4 th:text="${isSale.equalsIgnoreCase('buy') ? 'For Sale Range: ₹' + minRent + ' to ₹' + maxRent : 'For Rent Range: ₹' + minRent + ' to ₹' + maxRent}"></h4>-->
+
+                        <h4>
+                            <span th:text="${isSale ? 'For Sale Range: ₹' : 'For Rent Range: ₹'}"></span>
+                            <span id="minDisplay">0</span> to ₹<span id="maxDisplay">1,00,00,000</span>
+                        </h4>
+                        <div style="position: relative; height: 60px; margin: 20px 0;">
+                            <!-- Background track -->
+                            <div
+                                style="position: absolute; width: 100%; height: 6px; background: #ddd; border-radius: 3px; top: 27px; z-index: 0;">
+                            </div>
+
+                            <!-- Active range highlight -->
+                            <div id="sliderTrack"
+                                style="position: absolute; height: 6px; background: #007bff; border-radius: 3px; top: 27px; z-index: 1;">
+                            </div>
+
+                            <!-- Min slider -->
+                            <input type="range" id="minRentSlider" name="minRent" min="0" max="10000000" step="1000"
+                                th:value="${minRent}" oninput="syncRentRange()"
+                                style="position: absolute; width: 100%; height: 60px; background: transparent; outline: none; border: none; -webkit-appearance: none; appearance: none; z-index: 2;" />
+
+                            <!-- Max slider -->
+                            <input type="range" id="maxRentSlider" name="maxRent" min="0" max="10000000" step="1000"
+                                th:value="${maxRent}" oninput="syncRentRange()"
+                                style="position: absolute; width: 100%; height: 60px; background: transparent; outline: none; border: none; -webkit-appearance: none; appearance: none; z-index: 3;" />
+                        </div>
+
+                        <div
+                            style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 14px; color: #666;">
+                            <span>Min: ₹<span id="minValue">0</span></span>
+                            <span>Max: ₹<span id="maxValue">1,00,00,000</span></span>
+                        </div>
+                    </div>
+
+
+
+
+
+
+                    <!-- Availability -->
+                    <h4>Property Status</h4>
+                    <div class="filter-section" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        <label style="flex: 1 1 45%; display: flex; align-items: center;">
+                            <input type="radio" name="propertyStatus" value="Available"
+                                th:checked="${propertyStatus != null and propertyStatus == 'Available'}" />
+                            <span style="margin-left: 5px; white-space: nowrap;">Available</span>
+                        </label>
+
+                        <label style="flex: 1 1 45%; display: flex; align-items: center;">
+                            <input type="radio" name="propertyStatus" value="Not Available"
+                                th:checked="${propertyStatus != null and propertyStatus == 'Not Available'}" />
+                            <span style="margin-left: 5px; white-space: nowrap;">Not Available</span>
+                        </label>
+
+                        <label style="flex: 1 1 45%; display: flex; align-items: center;">
+                            <input type="radio" name="propertyStatus" value=""
+                                th:checked="${propertyStatus == null or propertyStatus == ''}" />
+                            <span style="margin-left: 5px; white-space: nowrap;">Any Status</span>
+                        </label>
+                    </div>
+
+                    <!-- Property Status -->
+                    <h4>Furnishing</h4>
+                    <div class="filter-section" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        <label style="flex: 1 1 30%; display: flex; align-items: center;">
+                            <input type="checkbox" name="furnishing" value="Fully Furnished"
+                                th:checked="${furnishing != null and furnishing.contains('Fully Furnished')}" />
+                            <span style="margin-left: 5px;">Full</span>
+                        </label>
+
+                        <label style="flex: 1 1 30%; display: flex; align-items: center;">
+                            <input type="checkbox" name="furnishing" value="Semi Furnished"
+                                th:checked="${furnishing != null and furnishing.contains('Semi Furnished')}" />
+                            <span style="margin-left: 5px;">Semi</span>
+                        </label>
+
+                        <label style="flex: 1 1 30%; display: flex; align-items: center;">
+                            <input type="checkbox" name="furnishing" value="Unfurnished"
+                                th:checked="${furnishing != null and furnishing.contains('Unfurnished')}" />
+                            <span style="margin-left: 5px;">Unfurnished</span>
+                        </label>
+                    </div>
+
+
+                    <h4>Property Type</h4>
+                    <div class="filter-section" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        <label style="flex: 1 1 30%; display: flex; align-items: center;">
+                            <input type="checkbox" name="propertyType" value="Apartment"
+                                th:checked="${propertyType != null and propertyType.contains('Apartment')}" />
+                            <span style="margin-left: 5px;">Apartment</span>
+                        </label>
+
+                        <label style="flex: 1 1 30%; display: flex; align-items: center;">
+                            <input type="checkbox" name="propertyType" value="Gated Community"
+                                th:checked="${propertyType != null and propertyType.contains('Gated Community')}" />
+                            <span style="margin-left: 5px;">Gated Community</span>
+                        </label>
+
+                        <label style="flex: 1 1 30%; display: flex; align-items: center;">
+                            <input type="checkbox" name="propertyType" value="Villa"
+                                th:checked="${propertyType != null and propertyType.contains('Villa')}" />
+                            <span style="margin-left: 5px;">Villa</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="apply-filters-btn">Apply Filters</button>
+                </form>
+            </div>
+
+            <div id="premium-filters" class="filter-content premium-filter-content"
+                onclick="checkSubscriptionAndRedirect(event)">
+                <form id="premium-filter-form" method="get" action="/getProperties">
+                    <input type="hidden" name="type" th:value="${isSale}" />
+                    <input type="hidden" name="city" th:value="${city}" />
+                    <input type="hidden" name="query" th:value="${searchKeyword}" />
+                    <input type="hidden" name="filterType" value="premium" />
+
+                    <div class="filter-section">
+                        <h4>Property Age</h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                            <label style="flex: 1 1 30%; display: flex; align-items: center;">
+                                <input type="radio" name="propertyAge" value="1"
+                                    th:checked="${propertyAge != null and propertyAge == 1}" />
+                                <span style="margin-left: 5px; white-space: nowrap;">&lt; 1 year</span>
+                            </label>
+
+                            <label style="flex: 1 1 30%; display: flex; align-items: center;">
+                                <input type="radio" name="propertyAge" value="2"
+                                    th:checked="${propertyAge != null and propertyAge == 2}" />
+                                <span style="margin-left: 5px; white-space: nowrap;">&lt; 3 years</span>
+                            </label>
+
+                            <label style="flex: 1 1 30%; display: flex; align-items: center;">
+                                <input type="radio" name="propertyAge" value="3"
+                                    th:checked="${propertyAge != null and propertyAge == 3}" />
+                                <span style="margin-left: 5px; white-space: nowrap;">&lt; 5 years</span>
+                            </label>
+
+                            <label style="flex: 1 1 30%; display: flex; align-items: center;">
+                                <input type="radio" name="propertyAge" value="4"
+                                    th:checked="${propertyAge != null and propertyAge == 4}" />
+                                <span style="margin-left: 5px; white-space: nowrap;">&lt; 10 years</span>
+                            </label>
+
+                            <label style="flex: 1 1 30%; display: flex; align-items: center;">
+                                <input type="radio" name="propertyAge" value="5"
+                                    th:checked="${propertyAge != null and propertyAge == 5}" />
+                                <span style="margin-left: 5px; white-space: nowrap;">10 years +</span>
+                            </label>
+
+                            <label style="flex: 1 1 30%; display: flex; align-items: center;">
+                                <input type="radio" name="propertyAge" value="" th:checked="${propertyAge == null}" />
+                                <span style="margin-left: 5px; white-space: nowrap;">Any Age</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="filter-section">
+                        <h4>Built Up Area (sq. ft.): <span id="minAreaDisplay">0</span> to <span
+                                id="maxAreaDisplay">10,000</span></h4>
+                        <div style="position: relative; height: 60px; margin: 20px 0;">
+                            <!-- Background track -->
+                            <div
+                                style="position: absolute; width: 100%; height: 6px; background: #ddd; border-radius: 3px; top: 27px; z-index: 0;">
+                            </div>
+                            <!-- Active range highlight -->
+                            <div id="areaTrack"
+                                style="position: absolute; height: 6px; background: #007bff; border-radius: 3px; top: 27px; z-index: 1;">
+                            </div>
+                            <!-- Min slider -->
+                            <input type="range" id="minAreaSlider" name="minBuiltUpArea" min="0" max="10000" step="100"
+                                th:value="${minBuiltUpArea != null ? minBuiltUpArea : 0}" oninput="syncAreaRange()"
+                                style="position: absolute; width: 100%; height: 60px; background: transparent; outline: none; border: none; -webkit-appearance: none; appearance: none; pointer-events: none; z-index: 3;" />
+                            <!-- Max slider -->
+                            <input type="range" id="maxAreaSlider" name="maxBuiltUpArea" min="0" max="10000" step="100"
+                                th:value="${maxBuiltUpArea != null ? maxBuiltUpArea : 10000}" oninput="syncAreaRange()"
+                                style="position: absolute; width: 100%; height: 60px; background: transparent; outline: none; border: none; -webkit-appearance: none; appearance: none; pointer-events: none; z-index: 2;" />
+                        </div>
+                        <div
+                            style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 14px; color: #666;">
+                            <span>Min: <span id="minAreaValue">0</span></span>
+                            <span>Max: <span id="maxAreaValue">10,000</span></span>
+                        </div>
+                    </div>
+
+
+                    <!-- Parking -->
+                    <div class="filter-section">
+                        <h4>Parking</h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                            <label style="flex: 1 1 30%; display: flex; align-items: center;">
+                                <input type="checkbox" name="parking" value="Bike"
+                                    th:checked="${parking != null and parking.contains('Bike')}" />
+                                <span style="margin-left: 5px; white-space: nowrap;">Bike</span>
+                            </label>
+
+                            <label style="flex: 1 1 30%; display: flex; align-items: center;">
+                                <input type="checkbox" name="parking" value="Car"
+                                    th:checked="${parking != null and parking.contains('Car')}" />
+                                <span style="margin-left: 5px; white-space: nowrap;">Car</span>
+                            </label>
+
+                            <label style="flex: 1 1 30%; display: flex; align-items: center;">
+                                <input type="checkbox" name="parking" value="Both"
+                                    th:checked="${parking != null and parking.contains('Both')}" />
+                                <span style="margin-left: 5px; white-space: nowrap;">Both</span>
+                            </label>
+
+                        </div>
+                    </div>
+
+                    <button type="submit" class="apply-filters-btn">Apply Filters</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- PROPERTY LISTINGS -->
+        <div class="main-area">
+            <!-- Properties Header -->
+            <div class="properties-header">
+                <form method="get" action="/getProperties"
+                    style="display: flex; align-items: center; gap: 10px; width: 100%;">
+                    <input type="hidden" name="type" th:value="${isSale}" />
+                    <input type="hidden" name="city" th:value="${city}" />
+                    <input id="autocomplete" class="search-input" placeholder="Search locality or landmark" name="query"
+                        th:value="${searchQuery}" style="flex: 1; padding: 8px;
+                               font-size: 14px; border: 1px solid #ccc; border-radius: 4px;" />
+                    <button type="submit"
+                        style="padding: 8px 14px; background-color: #ff4c5b; color: white; border: none; border-radius: 4px; ">Search</button>
+                </form>
+                <form method="get" action="/getProperties" id="sortForm">
+                    <input type="hidden" name="type" th:value="${isSale}" />
+                    <input type="hidden" name="city" th:value="${city}" />
+                    <input type="hidden" name="query" th:value="${searchKeyword}" />
+                    <select name="sortBy" onchange="document.getElementById('sortForm').submit()" class="sort-dropdown">
+                        <option value="">NoBroker Rank</option>
+                        <option value="newest" th:selected="${sortBy == 'newest'}">Newest to Oldest</option>
+                        <option value="oldest" th:selected="${sortBy == 'oldest'}">Oldest to Newest</option>
+                        <option value="priceHighLow" th:selected="${sortBy == 'priceHighLow'}">Price: High to Low
+                        </option>
+                        <option value="priceLowHigh" th:selected="${sortBy == 'priceLowHigh'}">Price: Low to High
+                        </option>
+                    </select>
+                </form>
+            </div>
+
+            <div id="properties-container" class="properties-container">
+                <div id="post-list"
+                    th:replace="~{fragments/postSection :: postSection(allProperties=${allProperties}, hasNext=${totalPages > currentPage + 1})}">
+                </div>
+                <!-- Shown only while infinite-scroll fetch is in progress -->
+                <div id="infinite-loader" class="infinite-loader" style="display:none;">
+                    <div class="spinner" aria-hidden="true"></div>
+                    <div class="loader-text">Loading more properties...</div>
+                </div>
+            </div>
+        </div>
+        <div style="width: 20%"></div>
+    </div>
+
+    <!-- Chat Widget -->
+    <div id="chat-icon" onclick="toggleChatbox()">
+        <img src="https://assets.nobroker.in/nb-new/public/Common/chatLightBg.svg" alt="Chat"
+            style="width: 40px; height: 40px;">
+    </div>
+
+    <div id="chatbox" style="display: none;">
+        <div class="chat-header">
+            <img src="/images/ai_bot.png" width="70px" height="70px">
+            <div class="chat-title">
+                <div>Natasha</div>
+                <div>Your AI Assistant</div>
+            </div>
+        </div>
+        <div class="chat-messages" id="chat-messages" style="white-space: pre-line;"></div>
+        <div class="chat-input">
+            <input type="text" id="user-message" placeholder="Ask your question here.." />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+
+</body>
+<script>
+    // Which thumb the user is actively dragging (used to clamp correctly)
+    let activeRentThumb = null;
+
+    function setActiveRentThumb(which) {
+        activeRentThumb = which;
+        const minSlider = document.getElementById("minRentSlider");
+        const maxSlider = document.getElementById("maxRentSlider");
+        if (!minSlider || !maxSlider) return;
+        // Bring the active slider above the other when thumbs overlap.
+        if (which === 'min') {
+            minSlider.style.zIndex = '4';
+            maxSlider.style.zIndex = '3';
+        } else if (which === 'max') {
+            maxSlider.style.zIndex = '4';
+            minSlider.style.zIndex = '3';
+        }
+    }
+
+    function toggleChatbox() {
+        const chatbox = document.getElementById('chatbox');
+        chatbox.style.display = (chatbox.style.display === 'none') ? 'block' : 'none';
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('user-message');
+        const message = input.value.trim();
+        if (message === '') return;
+
+        appendMessage("You", message);
+        input.value = '';
+
+        fetch('/chatbot', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message })
+        })
+            .then(res => res.text())
+            .then(data => {
+                appendMessage("AI", data);
+            })
+            .catch(() => {
+                appendMessage("AI", "Sorry, something went wrong.");
+            });
+    }
+
+    function appendMessage(sender, text) {
+        const msgDiv = document.getElementById('chat-messages');
+        msgDiv.innerHTML += `<p><strong>${sender}:</strong> ${text}</p>`;
+        msgDiv.scrollTop = msgDiv.scrollHeight;
+    }
+</script>
+<script>
+    // static/js/bookmark.js
+    function toggleBookmark(button) {
+        const propertyId = button.getAttribute('data-property-id');
+
+        console.log("Bookmark clicked:", propertyId);
+
+        fetch(`/toggleBookmark/${propertyId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(res => {
+                if (!res.ok) throw new Error("Network response was not ok");
+                return res.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    button.style.color = data.bookmarked ? 'red' : '#ccc';
+                } else {
+                    alert("Failed to update bookmark");
+                }
+            })
+            .catch(err => {
+                console.error("Bookmark error:", err);
+                alert("Something went wrong while bookmarking.");
+            });
+    }
+
+
+    // Add this function to handle premium filter clicks
+    function checkSubscriptionAndRedirect(event) {
+        // Check if the click was on a form element (we don't want to intercept those)
+        if (event.target.tagName === 'INPUT' || event.target.tagName === 'BUTTON' || event.target.tagName === 'SELECT') {
+            return; // Let the normal form behavior happen
+        }
+
+        event.preventDefault();
+
+        fetch("/subscribeOrNot")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.subscribed === true) {
+                    // If subscribed, switch to premium tab
+                    switchTab('premium');
+                } else {
+                    // If not subscribed, redirect to subscription page
+                    window.location.href = "/subscriptionForm";
+                }
+            })
+            .catch(error => {
+                console.error("Error checking subscription:", error);
+                alert("Something went wrong while checking subscription status.");
+            });
+    }
+
+    // Modify your premium filter form submission
+    document.getElementById('premium-filter-form')?.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        fetch("/subscribeOrNot")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.subscribed === true) {
+                    // If subscribed, submit the form
+                    this.submit();
+                } else {
+                    // If not subscribed, redirect to subscription page
+                    window.location.href = "/subscribe";
+                }
+            })
+            .catch(error => {
+                console.error("Error checking subscription:", error);
+                alert("Something went wrong while checking subscription status.");
+            });
+    });
+</script>
+
+<script>
+    let page = [[${ currentPage }]];
+    let loading = false;
+    let hasMore = [[${ totalPages > currentPage + 1}]];
+    const loaderEl = document.getElementById('infinite-loader');
+
+    // Build the base URL with all filter parameters
+    const params = new URLSearchParams(window.location.search);
+    params.delete('page');
+    const baseURL = `/loadMorePosts?${params.toString()}`;
+
+    // threshold: 0 is REQUIRED — the trigger div is empty (0 height),
+    // so threshold:1.0 means "100% visible" which never fires on a 0-height element.
+    const observer = new IntersectionObserver(async (entries) => {
+        const entry = entries[0];
+        if (entry.isIntersecting && !loading && hasMore) {
+            loading = true;
+            page++;
+            if (loaderEl) loaderEl.style.display = 'flex';
+
+            try {
+                const response = await fetch(`${baseURL}&page=${page}&size=5`);
+                if (response.ok) {
+                    const html = await response.text();
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = html;
+
+                    const newPosts = tempDiv.querySelectorAll('.property-card');
+                    const container = document.getElementById('properties-container');
+
+                    // Remove old trigger point before adding new one
+                    const oldTrigger = document.getElementById('trigger-point');
+                    if (oldTrigger) oldTrigger.remove();
+
+                    if (newPosts.length === 0) {
+                        hasMore = false;
+                    } else {
+                        // Keep loader at the bottom: insert new posts right before it.
+                        newPosts.forEach(post => {
+                            if (loaderEl && loaderEl.parentElement === container) {
+                                container.insertBefore(post, loaderEl);
+                            } else {
+                                container.appendChild(post);
+                            }
+                        });
+                    }
+
+                    const newTrigger = tempDiv.querySelector('#trigger-point');
+                    if (newTrigger) {
+                        // Keep trigger just before loader (so loader stays last).
+                        if (loaderEl && loaderEl.parentElement === container) {
+                            container.insertBefore(newTrigger, loaderEl);
+                        } else {
+                            container.appendChild(newTrigger);
+                        }
+                        observer.observe(newTrigger);
+                    } else {
+                        hasMore = false;
+                    }
+                } else {
+                    hasMore = false;
+                }
+            } catch (error) {
+                console.error('Error loading more posts:', error);
+                hasMore = false;
+            } finally {
+                loading = false;
+                if (loaderEl) loaderEl.style.display = 'none';
+            }
+        }
+    }, { threshold: 0 });
+
+    // Observe trigger immediately — fragment is server-side rendered,
+    // so #trigger-point already exists in DOM when this script runs.
+    (function attachTrigger() {
+        const trigger = document.getElementById('trigger-point');
+        if (trigger && hasMore) {
+            observer.observe(trigger);
+        }
+    })();
+
+    // Get filter type from URL parameters to determine which tab should be active
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+    // Filter tab switching functionality
+    function switchTab(tabType) {
+        const filterTabs = document.querySelectorAll('.filter-tab');
+        const basicFilters = document.getElementById('basic-filters');
+        const premiumFilters = document.getElementById('premium-filters');
+
+        // Remove active class from all tabs
+        filterTabs.forEach(tab => {
+            tab.classList.remove('active');
+        });
+
+        if (tabType === 'basic') {
+            basicFilters.style.display = 'block';
+            premiumFilters.style.display = 'none';
+            filterTabs[0].classList.add('active');
+            premiumFilters.classList.remove('active');
+        } else if (tabType === 'premium') {
+            basicFilters.style.display = 'none';
+            premiumFilters.style.display = 'block';
+            filterTabs[1].classList.add('active');
+            premiumFilters.classList.add('active');
+        }
+    }
+
+    // Initialize page when DOM loads
+    document.addEventListener('DOMContentLoaded', function () {
+        // Check if premium filters were used (filterType is set by our forms).
+        const filterType = getUrlParameter('filterType');
+        const propertyAge = getUrlParameter('propertyAge');
+        const minBuiltUpArea = getUrlParameter('minBuiltUpArea');
+        const maxBuiltUpArea = getUrlParameter('maxBuiltUpArea');
+
+        // If premium filter was applied OR premium-only params exist, show premium tab.
+        if (filterType === 'premium' || propertyAge || minBuiltUpArea || maxBuiltUpArea) {
+            switchTab('premium');
+        } else {
+            switchTab('basic');
+        }
+
+        // Add event listeners to tabs
+        const filterTabs = document.querySelectorAll('.filter-tab');
+        if (filterTabs.length >= 2) {
+            filterTabs[0].addEventListener('click', function () {
+                switchTab('basic');
+            });
+
+            filterTabs[1].addEventListener('click', function () {
+                switchTab('premium');
+            });
+        }
+
+        // Initialize slider labels/tracks from server-rendered values.
+        if (typeof syncRentRange === 'function') {
+            syncRentRange();
+        }
+
+        // Ensure the correct thumb is "active" when the sliders overlap.
+        const minSlider = document.getElementById("minRentSlider");
+        const maxSlider = document.getElementById("maxRentSlider");
+        if (minSlider && maxSlider) {
+            const activateMin = () => setActiveRentThumb('min');
+            const activateMax = () => setActiveRentThumb('max');
+            minSlider.addEventListener('pointerdown', activateMin);
+            maxSlider.addEventListener('pointerdown', activateMax);
+            // Fallback for older browsers / non-pointer events
+            minSlider.addEventListener('mousedown', activateMin);
+            maxSlider.addEventListener('mousedown', activateMax);
+            minSlider.addEventListener('touchstart', activateMin, { passive: true });
+            maxSlider.addEventListener('touchstart', activateMax, { passive: true });
+        }
+        if (typeof syncAreaRange === 'function') {
+            const minAreaSlider = document.getElementById('minAreaSlider');
+            const maxAreaSlider = document.getElementById('maxAreaSlider');
+            if (minAreaSlider && maxAreaSlider) {
+                syncAreaRange();
+            }
+        }
+    });
+
+
+
+    function syncRentRange() {
+        const minSlider = document.getElementById("minRentSlider");
+        const maxSlider = document.getElementById("maxRentSlider");
+        let minValue = parseInt(minSlider.value);
+        let maxValue = parseInt(maxSlider.value);
+        const sliderMax = parseInt(minSlider.max || "10000000");
+        const gap = 1000;
+
+        // Prevent sliders from crossing.
+        // Important: clamp the thumb the user is dragging, don't "push" the other one backwards.
+        if (maxValue - minValue < gap) {
+            if (activeRentThumb === 'min') {
+                minValue = maxValue - gap;
+                minSlider.value = minValue;
+            } else {
+                // Default to clamping max (covers activeRentThumb === 'max' or null)
+                maxValue = minValue + gap;
+                maxSlider.value = maxValue;
+            }
+        }
+
+        // Update UI display
+        document.getElementById("minDisplay").textContent = minValue.toLocaleString();
+        document.getElementById("maxDisplay").textContent = maxValue.toLocaleString();
+        document.getElementById("minValue").textContent = minValue.toLocaleString();
+        document.getElementById("maxValue").textContent = maxValue.toLocaleString();
+
+        // Update slider track
+        const sliderTrack = document.getElementById("sliderTrack");
+        const minPercent = (minValue / sliderMax) * 100;
+        const maxPercent = (maxValue / sliderMax) * 100;
+        sliderTrack.style.left = minPercent + '%';
+        sliderTrack.style.width = (maxPercent - minPercent) + '%';
+
+        // (reserved for future live filter)
+    }
+
+    function syncAreaRange() {
+        const minSlider = document.getElementById("minAreaSlider");
+        const maxSlider = document.getElementById("maxAreaSlider");
+        let minValue = parseInt(minSlider.value);
+        let maxValue = parseInt(maxSlider.value);
+
+        if (minValue > maxValue - 100) {
+            minValue = maxValue - 100;
+            minSlider.value = minValue;
+        } else if (maxValue < minValue + 100) {
+            maxValue = minValue + 100;
+            maxSlider.value = maxValue;
+        }
+
+        // Update UI display
+        document.getElementById("minAreaDisplay").textContent = minValue.toLocaleString();
+        document.getElementById("maxAreaDisplay").textContent = maxValue.toLocaleString();
+        document.getElementById("minAreaValue").textContent = minValue.toLocaleString();
+        document.getElementById("maxAreaValue").textContent = maxValue.toLocaleString();
+
+        // Update slider track
+        const sliderTrack = document.getElementById("areaTrack");
+        const minPercent = (minValue / 10000) * 100;
+        const maxPercent = (maxValue / 10000) * 100;
+        sliderTrack.style.left = minPercent + '%';
+        sliderTrack.style.width = (maxPercent - minPercent) + '%';
+
+        // (reserved for future live filter)
+    }
+
+
+</script>
+
+<!-- Google Places autocomplete removed for search to avoid requiring a Maps API key. -->
+
+</html>

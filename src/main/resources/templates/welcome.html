@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/app.css}" />
+    <title>Welcome Page</title>
+    <link rel="icon" type="image/png" href="/images/nobroker-favicon.png">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div style="padding: 30px; font-size: 24px;">
+    👋 Welcome Vakaya!
+</div>
+
+</body>
+</html>

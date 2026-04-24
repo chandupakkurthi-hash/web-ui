@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <link rel="icon" type="image/png" href="/images/nobroker-favicon.png">
+</head>
+<body>
+
+<!-- sidebar.html -->
+<div th:fragment="user-sidebar(user)">
+  <div class="sidebar">
+    <h3>Manage your Account</h3>
+    <ul class="sidebar-menu">
+      <li><a th:href="@{'/profile/view/' + ${user.userId}}" class="active">Basic Profile</a></li>
+      <li><a th:href="@{'/shortlisted-properties/' + ${user.userId}}">Your Shortlists</a></li>
+      <li><a th:href="@{'/your-properties/' + ${user.userId}}">Your Properties</a></li>
+      <li><a th:href="@{'/interested-buyers/' + ${user.userId}}">Interested in your Properties</a></li>
+    </ul>
+  </div>
+</div>
+
+
+</body>
+</html>

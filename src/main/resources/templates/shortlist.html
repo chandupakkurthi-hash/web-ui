@@ -1,0 +1,975 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/app.css}" />
+    <link rel="icon" type="image/png" href="/images/nobroker-favicon.png">
+    <title>NoBroker - Property Listings</title>
+    <link rel="icon" type="image/png" href="/images/nobroker-favicon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        /* Header Styles */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+            z-index: 1000;
+            height: 60px;
+        }
+
+        .logo {
+            width: auto;
+            height: 30px;
+            max-width: 150px; /* Adjust as needed */
+            object-fit: contain; /* Prevents distortion */
+        }
+        .left-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 200px; /* Ensures enough space for logo */
+        }
+
+
+        .logo img {
+        height: 180px;
+        width: auto;
+        object-fit: contain;
+        }
+
+        .brand-name {
+            font-weight: bold;
+            font-size: 18px;
+            color: #e74c3c;
+        }
+
+        .menu-item {
+            color: #666;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .menu-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .right-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .pay-rent, .post-property {
+            padding: 8px 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .pay-rent {
+            background: #f8f9fa;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .pay-rent:hover {
+            background: #e9ecef;
+        }
+
+        .post-property {
+            background: #16a085;
+            color: white;
+            position: relative;
+        }
+
+        .post-property:hover {
+            background: #148f7a;
+        }
+
+        .profile {
+            color: #666;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 4px;
+        }
+
+        .view-toggle button {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .view-toggle button:first-child {
+            border-radius: 4px 0 0 4px;
+        }
+
+        .view-toggle button:last-child {
+            border-radius: 0 4px 4px 0;
+            border-left: none;
+        }
+
+	        /* Container and Layout */
+	        .container {
+	        display: flex;
+	        min-height: calc(100vh - 60px);
+	        gap:20px;
+	        padding-right: 20px;
+	    }
+
+        /* Sidebar */
+        .sidebar {
+        width: 300px;
+        background: #fff;
+        border-right: 1px solid #e9ecef;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        padding: 20px;
+        }
+
+
+
+        .sidebar h3 {
+        margin-bottom: 20px;
+        color: #495057;
+        font-size: 16px;
+    }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 8px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .sidebar-menu a {
+        display: block;
+        padding: 10px 15px;
+        color: #6c757d;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: all 0.3s;
+    }
+
+    .sidebar-menu a:hover,
+    .sidebar-menu a.active {
+        background: #f8f9fa;
+        color: #007bff;
+    }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 20px 20px 20px 0;
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #666;
+            transition: all 0.2s;
+        }
+
+        .filter-tab:hover {
+            border-color: #16a085;
+            color: #16a085;
+        }
+
+        .filter-tab.active {
+            background: #16a085;
+            color: white;
+            border-color: #16a085;
+        }
+
+        /* Content Header */
+        .content-header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .content-header h2 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .availability-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background: #16a085;
+            border-radius: 50%;
+        }
+
+        .compare-btn {
+            float: right;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .compare-btn::before {
+            content: "0+";
+            background: white;
+            color: #e74c3c;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 10px;
+            margin-right: 5px;
+        }
+
+        /* Property Grid */
+        .property-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+        }
+
+        .property-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            max-width: 100%;
+            width: 100%;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .property-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        .property-header {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .property-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #e74c3c;
+            margin-bottom: 5px;
+        }
+
+        .property-location {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .explore-nearby {
+            color: #16a085;
+            text-decoration: none;
+            font-size: 13px;
+            margin-left: 5px;
+        }
+
+        .property-body {
+            display: flex;
+            padding: 15px;
+        }
+
+        .property-image {
+            width: 180px;
+            height: 135px;
+            background-color: #000;
+            border-radius: 6px;
+            margin-right: 15px;
+            overflow: hidden;
+        }
+
+        .property-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .property-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .price-section {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 15px;
+        }
+
+        .price-item {
+            text-align: center;
+        }
+
+        .price-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .price-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        .included {
+            color: #16a085;
+            font-size: 11px;
+            margin-left: 5px;
+        }
+
+        .property-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .feature-icon {
+            width: 16px;
+            height: 16px;
+            background-color: #f0f0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+
+        .property-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .get-owner-btn {
+            flex: 1;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .wishlist-btn {
+            background: none;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #ccc;
+            font-size: 16px;
+        }
+
+        .wishlist-btn.active {
+            color: #e74c3c;
+            border-color: #e74c3c;
+        }
+
+        /* Chat Button */
+        .chat-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            font-size: 14px;
+            z-index: 1000;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                margin: 10px;
+                padding: 0 10px;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .property-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .property-body {
+                flex-direction: column;
+            }
+
+            .property-image {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+
+            .right-section {
+                gap: 8px;
+            }
+
+            .right-section button {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            .property-tabs {
+            overflow-x: auto;
+        }
+        }
+
+        .properties-section {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .property-tabs {
+        display: flex;
+        border-bottom: 1px solid #e9ecef;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        font-size: 18px;
+    }
+
+    .property-tab {
+        padding: 15px 20px;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        color: #6c757d;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    .property-tab.active {
+        color: #007bff;
+        border-bottom-color: #007bff;
+        background-color: #E8E8E8;
+    }
+
+    .property-columns {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+    }
+
+    .property-column h3 {
+        margin-bottom: 15px;
+        color: #495057;
+        font-size: 16px;
+    }
+
+    .property-links {
+        list-style: none;
+    }
+
+    .property-links li {
+        margin-bottom: 8px;
+    }
+
+    .property-links a {
+        color: #007bff;
+        text-decoration: none;
+        font-size: 14px;
+        display: block;
+        padding: 5px 0;
+    }
+
+    .property-links a:hover {
+        text-decoration: underline;
+    }
+
+    footer {
+          background-color: #f0f0f0;
+          color: #333;
+          text-align: center;
+    }
+
+        #chat-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ff5a5f;
+            color: white;
+            padding: 12px 14px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 999;
+        }
+
+        #chatbox {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 300px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            z-index: 1000;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 10px;
+            background-color: #ff5a5f;
+            font-weight: bold;
+        }
+
+        .chat-title {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .chat-messages {
+            padding: 10px;
+            height: 250px;
+            overflow-y: auto;
+            font-size: 14px;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 8px;
+            border-top: 1px solid #ccc;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .chat-input button {
+            margin-left: 8px;
+            background: #ff5a5f;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+<!-- Header -->
+<header class="main-header">
+    <div th:replace="~{fragments/header :: header}"></div>
+</header>
+
+<div class="container" style="margin-top: 60px">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3>Manage your Account</h3>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a th:href="@{'/profile/view/' + ${user.userId}}">Basic Profile</a></li>
+            <li ><a class="active" th:href="@{'/shortlisted-properties/' + ${user.userId}}">Your Shortlist</a></li>
+            <li><a th:href="@{'/shortlisted-payments/' + ${user.userId}}">Your Payments</a></li>
+            <li><a th:href="@{'/your-properties/' + ${user.userId}}">Your Properties</a></li>
+            <!-- need to change-->
+            <li><a th:href="@{'/logout'}">Sign Out</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Filter Tabs -->
+
+        <!-- Content Header -->
+        <div class="content-header">
+            <h2>Shortlisted Properties</h2>
+            <div class="availability-status">
+                <span class="status-indicator"></span>
+                <span>Currently Available</span>
+            </div>
+        </div>
+
+        <!-- Property Grid -->
+
+        <div th:each="property : ${allProperties}" class="property-card">
+            <a th:href="@{'/viewProperty/' + ${property.propertyId}}">
+                <h3 style="font-size:18px; font-weight:600; color:#333; margin:0 0 4px 0;"
+                    th:text="${property.bhkType + ' BHK Flat in ' + property.apartmentName + ' For ' + (property.isSale ? 'Sale' : 'Rent') + ' near ' + (property.address != null ? property.address.landmark : 'your location')}">
+                    Apartment Title
+                </h3>
+            </a>
+            <p style="font-size:13px; color:#555; margin:0 0 10px 0;">
+        <span th:if="${property.address != null}"
+              th:text="${property.address.landmark + ' ' + property.address.locality + ', ' + property.address.city}">
+            Address
+        </span>
+                <a href="#" style="color:#007bff; text-decoration:none; margin-left:10px;">🔍 Explore Nearby</a>
+            </p>
+            <div style="display:flex; gap:12px; margin-bottom:12px;">
+                <div style="flex:1; min-width:0; max-width:200px; border:1px solid #ddd; border-radius:6px; padding:8px; text-align:center;">
+                    <p style="margin:0; font-size:16px; font-weight:bold; color:#222; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                        ₹<span th:text="${property.price}">56789087</span>
+                    </p>
+                    <p style="margin:0; font-size:12px; color:#555;"
+                       th:if="${property.price != null and property.builtUpArea != null and property.builtUpArea > 0}">
+                        ₹<span th:text="${property.price * 0.01}">0</span>/mo
+                    </p>
+                </div>
+                <div style="flex:1; border:1px solid #ddd; border-radius:6px; padding:8px; text-align:center;">
+                    <p style="margin:0; font-size:14px; font-weight:bold; color:#222;">
+                        ₹<span th:text="${property.price != null ? (property.price * 1000 / 100000) : 0}">0</span>/mo
+                    </p>
+                    <p style="margin:0; font-size:12px; color:#555;">Estimated EMI</p>
+                </div>
+                <div style="flex:1; border:1px solid #ddd; border-radius:6px; padding:8px; text-align:center;">
+                    <p style="margin:0; font-size:14px; font-weight:bold; color:#222;">
+                        <span th:text="${property.builtUpArea}">0</span> sqft
+                    </p>
+                    <p style="margin:0; font-size:12px; color:#555;">Built-up Area</p>
+                </div>
+            </div>
+            <div style="display:flex; gap:12px;">
+                <div style="width:calc(100% / 3); height:200px; border-radius:6px; overflow:hidden; background:#f5f5f5; position:relative;"
+                     onmouseover="startImageRotation(this)"
+                     onmouseout="stopImageRotation(this)">
+                    <img th:src="${!#lists.isEmpty(property.photos) ? property.photos.iterator().next().imageUrl : 'https://via.placeholder.com/200x200'}"
+                         alt="Property Image"
+                         style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; transition:opacity 0.1s ease;" />
+                    <img th:each="photo,stat : ${property.photos}"
+                         th:if="${stat.index > 0}"
+                         th:src="${photo.imageUrl}"
+                         alt="Property Image"
+                         style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; opacity:0; transition:opacity 0.5s ease;" />
+                </div>
+                <div style="flex:2; display:flex; flex-direction:column; justify-content:space-between; height:200px;">
+                    <div style="display:flex; gap:10px;">
+                        <div style="flex:1; border:1px solid #ddd; padding:10px; border-radius:6px; display:flex; align-items:center; justify-content:center; gap:8px;">
+                            <div style="font-size:16px;">🧭</div>
+                            <div style="text-align:center;">
+                                <p style="margin:0; font-size:14px; font-weight:bold;" th:text="${property.facing}">East</p>
+                                <p style="margin:0; font-size:11px; color:#777;">Facing</p>
+                            </div>
+                        </div>
+                        <div style="flex:1; border:1px solid #ddd; padding:10px; border-radius:6px; display:flex; align-items:center; justify-content:center; gap:8px;">
+                            <div style="font-size:16px;">🏠</div>
+                            <div style="text-align:center;">
+                                <p style="margin:0; font-size:14px;" th:text="${property.apartmentType}">2 BHK</p>
+                                <p style="margin:0; font-size:11px; color:#777;">Type</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <div style="flex:1; border:1px solid #ddd; padding:10px; border-radius:6px; display:flex; align-items:center; justify-content:center; gap:8px;">
+                            <div style="font-size:16px;">🚿</div>
+                            <div style="text-align:center;">
+                                <p style="margin:0; font-size:14px;" th:text="${property.amenity != null ? property.amenity.bathrooms : '-'}">2</p>
+                                <p style="margin:0; font-size:11px; color:#777;">Bathrooms</p>
+                            </div>
+                        </div>
+                        <div style="flex:1; border:1px solid #ddd; padding:10px; border-radius:6px; display:flex; align-items:center; justify-content:center; gap:8px;">
+                            <div style="font-size:16px;">🅿️</div>
+                            <div style="text-align:center;">
+                                <p style="margin:0; font-size:14px;" th:text="${property.parking}">Car/Bike</p>
+                                <p style="margin:0; font-size:11px; color:#777;">Parking</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
+                        <a th:href="@{/checkSubscribe(propertyId=${property.propertyId})}"
+                           style="padding:10px 16px; background:orangered; color:white; text-decoration:none; border-radius:6px; font-size:14px; font-weight:500;">
+                            Get Owner Details
+                        </a>
+                        <div style="display:flex; gap:12px; align-items:center;">
+                            <form th:action="@{'/removeBookMarks/' + ${user.userId} +'/'+${property.propertyId}}" method="post" style="margin:0;padding-right: 10px">
+                                <button type="submit"
+                                        style="padding:6px 12px; background:#dc3545; color:white; border:none; border-radius:4px; font-size:13px; cursor:pointer; font-weight:500;">
+                                    Remove Bookmark
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Chat Widget -->
+<div id="chat-icon" onclick="toggleChatbox()">
+    <img src="https://assets.nobroker.in/nb-new/public/Common/chatLightBg.svg" alt="Chat"
+         style="width: 40px; height: 40px;">
+</div>
+
+<div id="chatbox" style="display: none;">
+    <div class="chat-header">
+        <img src="/images/ai_bot.png" width="70px" height="70px">
+        <div class="chat-title">
+            <div>Natasha</div>
+            <div>Your AI Assistant</div>
+        </div>
+    </div>
+    <div class="chat-messages" id="chat-messages" style="white-space: pre-line;"></div>
+    <div class="chat-input">
+        <input type="text" id="user-message" placeholder="Ask your question here.." />
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+<footer>
+    <div class="properties-section">
+        <div class="property-tabs">
+            <div class="property-tab active">Properties & Flats for Sale</div>
+            <div class="property-tab">Flats for Rent</div>
+            <div class="property-tab">PG / Hostels</div>
+            <div class="property-tab">Flatmates</div>
+            <div class="property-tab">Miscellaneous</div>
+            <div class="property-tab">Commercial</div>
+            <div class="property-tab">New Projects & Plots</div>
+            <div class="property-tab">Independent Houses & Villas</div>
+        </div>
+
+        <div class="property-columns">
+            <div class="property-column">
+                <h3>Flats for Sale in Bangalore</h3>
+                <ul class="property-links">
+                    <li><a href="#">Flats for Sale in Koramangala</a></li>
+                    <li><a href="#">Flats for Sale in Marathahalli</a></li>
+                    <li><a href="#">Flats for Sale in HSR Layout</a></li>
+                    <li><a href="#">Flats for Sale in Whitefield</a></li>
+                    <li><a href="#">Flats for Sale in Indira Nagar</a></li>
+                    <li><a href="#">Flats for Sale in Bellandur</a></li>
+                    <li><a href="#">Flats for Sale in Chandra Layout</a></li>
+                    <li><a href="#">Flats for Sale in J. P Nagar</a></li>
+                    <li><a href="#">Flats for Sale in BTM Layout</a></li>
+                    <li><a href="#">Flats for Sale in Jayanagar</a></li>
+                </ul>
+            </div>
+
+            <div class="property-column">
+                <h3>Flats for Sale in Mumbai</h3>
+                <ul class="property-links">
+                    <li><a href="#">Flats for Sale in Andheri West</a></li>
+                    <li><a href="#">Flats for Sale in Andheri East</a></li>
+                    <li><a href="#">Flats for Sale in Malad West</a></li>
+                    <li><a href="#">Flats for Sale in Navi Mumbai</a></li>
+                    <li><a href="#">Flats for Sale in Powai</a></li>
+                    <li><a href="#">Flats for Sale in Thane West</a></li>
+                    <li><a href="#">Flats for Sale in Mira Road East</a></li>
+                    <li><a href="#">Flats for Sale in Kharghar</a></li>
+                    <li><a href="#">Flats for Sale in Kandivali East</a></li>
+                    <li><a href="#">Flats for Sale in Bandra West</a></li>
+                </ul>
+            </div>
+
+            <div class="property-column">
+                <h3>Flats for Sale in Chennai</h3>
+                <ul class="property-links">
+                    <li><a href="#">Flats for Sale in Velachery</a></li>
+                    <li><a href="#">Flats for Sale in Thiruvanmiyur</a></li>
+                    <li><a href="#">Flats for Sale in Madipakkam</a></li>
+                    <li><a href="#">Flats for Sale in Thoraipakkam</a></li>
+                    <li><a href="#">Flats for Sale in Sholinganallur</a></li>
+                    <li><a href="#">Flats for Sale in Medavakkam</a></li>
+                    <li><a href="#">Flats for Sale in Mylapore</a></li>
+                    <li><a href="#">Flats for Sale in Adyar</a></li>
+                    <li><a href="#">Flats for Sale in T Nagar</a></li>
+                    <li><a href="#">Flats for Sale in Perungudi</a></li>
+                </ul>
+            </div>
+
+            <div class="property-column">
+                <h3>Flats for Sale in Pune</h3>
+                <ul class="property-links">
+                    <li><a href="#">Flats for Sale in Wakad</a></li>
+                    <li><a href="#">Flats for Sale in Kharadi</a></li>
+                    <li><a href="#">Flats for Sale in Baner</a></li>
+                    <li><a href="#">Flats for Sale in Hadapsar</a></li>
+                    <li><a href="#">Flats for Sale in Aundh</a></li>
+                    <li><a href="#">Flats for Sale in Kothrud</a></li>
+                    <li><a href="#">Flats for Sale in Pimpri-Saudagar</a></li>
+                    <li><a href="#">Flats for Sale in Viman Nagar</a></li>
+                    <li><a href="#">Flats for Sale in Pimpri</a></li>
+                    <li><a href="#">Flats for Sale in Hinjewadi</a></li>
+                </ul>
+            </div>
+
+            <div class="property-column">
+                <h3>Flats for Sale in Gurgaon</h3>
+                <ul class="property-links">
+                    <li><a href="#">1 BHK Flats in Gurgaon</a></li>
+                    <li><a href="#">2 BHK Flats in Gurgaon</a></li>
+                    <li><a href="#">3 BHK Flats in Gurgaon</a></li>
+                    <li><a href="#">4 BHK Flats in Gurgaon</a></li>
+                    <li><a href="#">4+ BHK in Gurgaon</a></li>
+                    <li><a href="#">Fully Furnished Flats in Gurgaon</a></li>
+                    <li><a href="#">Semi Furnished Flats in Gurgaon</a></li>
+                    <li><a href="#">Unfurnished Flats in Gurgaon</a></li>
+                    <li><a href="#">Independent Floor for Sale in Gurgaon</a></li>
+                    <li><a href="#">Independent Houses For Sale In Gurgaon</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Chat Widget -->
+
+
+<script>
+    // Filter tab functionality
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+
+    // Sidebar menu functionality
+    document.querySelectorAll('.sidebar-menu a').forEach(link => {
+        link.addEventListener('click', function(e) {
+
+            document.querySelectorAll('.sidebar-menu a').forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+
+    // Wishlist toggle
+    document.querySelectorAll('.wishlist-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            this.classList.toggle('active');
+        });
+    });
+
+    // Get Owner Details functionality
+    document.querySelectorAll('.get-owner-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            alert('Owner details will be displayed here');
+        });
+    });
+
+    // Chat functionality
+    function startChat() {
+        alert('Chat functionality would be implemented here');
+    }
+
+    // Responsive menu toggle (if needed)
+    function toggleMenu() {
+        // Implementation for mobile menu toggle
+        console.log('Menu toggled');
+    }
+
+    // Property card hover effects are handled by CSS
+    // Additional JavaScript functionality can be added as needed
+</script>
+<script>
+    function toggleChatbox() {
+        const chatbox = document.getElementById('chatbox');
+        chatbox.style.display = (chatbox.style.display === 'none') ? 'block' : 'none';
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('user-message');
+        const message = input.value.trim();
+        if (message === '') return;
+
+        appendMessage("You", message);
+        input.value = '';
+
+        fetch('/chatbot', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message })
+        })
+            .then(res => res.text())
+            .then(data => {
+                appendMessage("AI", data);
+            })
+            .catch(() => {
+                appendMessage("AI", "Sorry, something went wrong.");
+            });
+    }
+
+    function appendMessage(sender, text) {
+        const msgDiv = document.getElementById('chat-messages');
+        msgDiv.innerHTML += `<p><strong>${sender}:</strong> ${text}</p>`;
+        msgDiv.scrollTop = msgDiv.scrollHeight;
+    }
+</script>
+</body>
+</html>

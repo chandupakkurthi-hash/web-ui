@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+</head>
+<body>
+<div th:fragment="footer">
+  <div class="properties-section">
+    <div class="property-tabs">
+      <div class="property-tab ">Properties & Flats for Sale</div>
+      <div class="property-tab">Flats for Rent</div>
+      <div class="property-tab">PG / Hostels</div>
+      <div class="property-tab">Flatmates</div>
+      <div class="property-tab">Miscellaneous</div>
+      <div class="property-tab">Commercial</div>
+      <div class="property-tab">New Projects & Plots</div>
+      <div class="property-tab">Independent Houses & Villas</div>
+    </div>
+
+    <div class="property-columns">
+      <div class="property-column">
+        <h3>Flats for Sale in Bangalore</h3>
+        <ul class="property-links">
+          <li><a href="#">Flats for Sale in Koramangala</a></li>
+          <li><a href="#">Flats for Sale in Marathahalli</a></li>
+          <li><a href="#">Flats for Sale in HSR Layout</a></li>
+          <li><a href="#">Flats for Sale in Whitefield</a></li>
+          <li><a href="#">Flats for Sale in Indira Nagar</a></li>
+          <li><a href="#">Flats for Sale in Bellandur</a></li>
+          <li><a href="#">Flats for Sale in Chandra Layout</a></li>
+          <li><a href="#">Flats for Sale in J. P Nagar</a></li>
+          <li><a href="#">Flats for Sale in BTM Layout</a></li>
+          <li><a href="#">Flats for Sale in Jayanagar</a></li>
+        </ul>
+      </div>
+
+      <div class="property-column">
+        <h3>Flats for Sale in Mumbai</h3>
+        <ul class="property-links">
+          <li><a href="#">Flats for Sale in Andheri West</a></li>
+          <li><a href="#">Flats for Sale in Andheri East</a></li>
+          <li><a href="#">Flats for Sale in Malad West</a></li>
+          <li><a href="#">Flats for Sale in Navi Mumbai</a></li>
+          <li><a href="#">Flats for Sale in Powai</a></li>
+          <li><a href="#">Flats for Sale in Thane West</a></li>
+          <li><a href="#">Flats for Sale in Mira Road East</a></li>
+          <li><a href="#">Flats for Sale in Kharghar</a></li>
+          <li><a href="#">Flats for Sale in Kandivali East</a></li>
+          <li><a href="#">Flats for Sale in Bandra West</a></li>
+        </ul>
+      </div>
+
+      <div class="property-column">
+        <h3>Flats for Sale in Chennai</h3>
+        <ul class="property-links">
+          <li><a href="#">Flats for Sale in Velachery</a></li>
+          <li><a href="#">Flats for Sale in Thiruvanmiyur</a></li>
+          <li><a href="#">Flats for Sale in Madipakkam</a></li>
+          <li><a href="#">Flats for Sale in Thoraipakkam</a></li>
+          <li><a href="#">Flats for Sale in Sholinganallur</a></li>
+          <li><a href="#">Flats for Sale in Medavakkam</a></li>
+          <li><a href="#">Flats for Sale in Mylapore</a></li>
+          <li><a href="#">Flats for Sale in Adyar</a></li>
+          <li><a href="#">Flats for Sale in T Nagar</a></li>
+          <li><a href="#">Flats for Sale in Perungudi</a></li>
+        </ul>
+      </div>
+
+      <div class="property-column">
+        <h3>Flats for Sale in Pune</h3>
+        <ul class="property-links">
+          <li><a href="#">Flats for Sale in Wakad</a></li>
+          <li><a href="#">Flats for Sale in Kharadi</a></li>
+          <li><a href="#">Flats for Sale in Baner</a></li>
+          <li><a href="#">Flats for Sale in Hadapsar</a></li>
+          <li><a href="#">Flats for Sale in Aundh</a></li>
+          <li><a href="#">Flats for Sale in Kothrud</a></li>
+          <li><a href="#">Flats for Sale in Pimpri-Saudagar</a></li>
+          <li><a href="#">Flats for Sale in Viman Nagar</a></li>
+          <li><a href="#">Flats for Sale in Pimpri</a></li>
+          <li><a href="#">Flats for Sale in Hinjewadi</a></li>
+        </ul>
+      </div>
+
+      <div class="property-column">
+        <h3>Flats for Sale in Gurgaon</h3>
+        <ul class="property-links">
+          <li><a href="#">1 BHK Flats in Gurgaon</a></li>
+          <li><a href="#">2 BHK Flats in Gurgaon</a></li>
+          <li><a href="#">3 BHK Flats in Gurgaon</a></li>
+          <li><a href="#">4 BHK Flats in Gurgaon</a></li>
+          <li><a href="#">4+ BHK in Gurgaon</a></li>
+          <li><a href="#">Fully Furnished Flats in Gurgaon</a></li>
+          <li><a href="#">Semi Furnished Flats in Gurgaon</a></li>
+          <li><a href="#">Unfurnished Flats in Gurgaon</a></li>
+          <li><a href="#">Independent Floor for Sale in Gurgaon</a></li>
+          <li><a href="#">Independent Houses For Sale In Gurgaon</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <style th:remove="all">
+    .properties-section {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .property-tabs {
+        display: flex;
+        border-bottom: 1px solid #e9ecef;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        font-size: 18px;
+    }
+
+    .property-tab {
+        padding: 15px 20px;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        color: #6c757d;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    .property-tab.active {
+        color: #007bff;
+        border-bottom-color: #007bff;
+        background-color: #E8E8E8;
+    }
+
+    .property-columns {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+    }
+
+    .property-column h3 {
+        margin-bottom: 15px;
+        color: #495057;
+        font-size: 16px;
+    }
+
+    .property-links {
+        list-style: none;
+    }
+
+    .property-links li {
+        margin-bottom: 8px;
+    }
+
+    .property-links a {
+        color: #007bff;
+        text-decoration: none;
+        font-size: 14px;
+        display: block;
+        padding: 5px 0;
+    }
+
+    .property-links a:hover {
+        text-decoration: underline;
+    }
+  </style>
+</div>
+
+</body>
+</html>

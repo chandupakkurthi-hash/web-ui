@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/app.css}" />
+    <link rel="stylesheet" th:href="@{/css/landing-page.css}" />
+    <link rel="stylesheet" th:href="@{/css/footer.css}" />
+    <link rel="icon" type="image/png" href="/images/nobroker-favicon.png">
+    <title>Flats, Houses, Apartments for Rent, Buy, Sale</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style th:remove="all">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+            z-index: 1000;
+            height: 60px;
+        }
+
+        .left-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header {
+            background: white;
+            padding: 12px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .logo-icon {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #ff4757, #ff3838);
+            border-radius: 50%;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-btn {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .header-btn:hover {
+            background: #f8f9fa;
+            transform: translateY(-1px);
+        }
+
+        .property-owners-btn {
+            background: #20bf6b;
+            color: white;
+            border: none;
+            position: relative;
+        }
+
+        .property-owners-btn:hover {
+            background: #1ea45c;
+        }
+
+        .new-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff4757;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .user-profile:hover {
+            background: #f8f9fa;
+        }
+
+        .user-avatar {
+            width: 30px;
+            height: 30px;
+            background: #6c5ce7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 8px;
+        }
+
+        .menu-icon {
+            cursor: pointer;
+            padding: 10px;
+            font-size: 20px;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            color: #2c3e50;
+            margin-bottom: 40px;
+            font-weight: 300;
+            letter-spacing: -1px;
+        }
+
+        .features-bar {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 12px 20px;
+            border-radius: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+
+        .search-section {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 60px;
+        }
+
+        .search-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .search-tab {
+            padding: 15px 30px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .search-tab.active {
+            color: #ff4757;
+            border-bottom-color: #ff4757;
+        }
+
+        .search-tab:hover {
+            color: #ff4757;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 10px;
+            align-items: stretch;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .location-dropdown {
+            position: relative;
+            min-width: 150px;
+        }
+
+        .location-select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e6ed;
+            border-radius: 8px;
+            background: white;
+            font-size: 16px;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 12px center;
+            background-repeat: no-repeat;
+            background-size: 16px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e0e6ed;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #ff4757;
+            box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.1);
+        }
+
+        .search-btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #ff4757, #ff3838);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-btn:hover {
+            background: linear-gradient(135deg, #ff3838, #ff2828);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.3);
+        }
+
+        .suggested-location {
+            margin-top: 15px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .suggested-location:hover {
+            background: #e9ecef;
+        }
+
+        .property-owner-section {
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .property-owner-text {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .post-property-btn {
+            background: #20bf6b;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .post-property-btn:hover {
+            background: #1ea45c;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(32, 191, 107, 0.3);
+        }
+
+        .loan-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 40px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .loan-icon {
+            font-size: 24px;
+        }
+
+        .loan-text {
+            font-size: 18px;
+        }
+
+        .check-eligibility-btn {
+            background: white;
+            color: #667eea;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .check-eligibility-btn:hover {
+            background: #f8f9fa;
+            transform: scale(1.05);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .service-card {
+            background: white;
+            padding: 30px 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff4757, #ff3838);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+
+
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+
+        .service-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .service-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #ff4757;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* Section Styling */
+        .why-nobroker-section,
+        .business-assist-section,
+        .difference-section {
+            margin: 80px 0;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 60px;
+            gap: 30px;
+        }
+
+        .section-title {
+            font-size: 36px;
+            color: #2c3e50;
+            font-weight: 300;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .section-dots {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff4757, #ff3838);
+            opacity: 0.6;
+            animation: pulse 2s infinite;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Why Use NoBroker Section */
+        .why-features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .why-feature-card {
+            text-align: center;
+            padding: 30px 20px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            background: #fafafa;
+            border: 2px solid transparent;
+        }
+
+
+        .why-feature-icon {
+            margin: 0 auto 20px;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+
+
+        .why-feature-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .why-feature-desc {
+            color: #666;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        /* Business Assist Section */
+        .business-assist-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 800px;
+            margin: 0 auto;
+            gap: 60px;
+        }
+
+        .business-illustration {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .business-assist-info {
+            flex: 1;
+            text-align: center;
+        }
+
+        .business-assist-text {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .enquire-btn {
+            background: linear-gradient(135deg, #ff4757, #ff3838);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+
+
+        .builder-contact {
+            color: #20bf6b;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* We Make A Difference Section */
+        .difference-stats {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 80px;
+            flex-wrap: wrap;
+        }
+
+        .stat-circle {
+            text-align: center;
+        }
+
+        .circle-progress {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+        }
+
+        .circle-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .circle-number {
+            display: block;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .circle-label {
+            display: block;
+            font-size: 12px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .section-header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .section-dots {
+                order: -1;
+            }
+
+            .section-title {
+                font-size: 28px;
+                white-space: normal;
+            }
+
+            .why-features-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .business-assist-content {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .difference-stats {
+                gap: 40px;
+            }
+
+            .business-illustration svg {
+                width: 250px;
+                height: 160px;
+            }
+        }
+
+        .chat-widget {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff4757, #ff3838);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(255, 71, 87, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .chat-widget:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 30px rgba(255, 71, 87, 0.4);
+        }
+
+        .chat-icon {
+            color: white;
+            font-size: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 0 15px;
+            }
+
+            .header-right {
+                gap: 10px;
+            }
+
+            .hero-title {
+                font-size: 32px;
+            }
+
+            .features-bar {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+
+            .search-form {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .services-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 20px;
+            }
+
+            .loan-banner {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        .dropdown-item {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+            transition: background 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background: #f8f9fa;
+        }
+
+        #chat-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ff5a5f;
+            color: white;
+            padding: 12px 14px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 999;
+        }
+
+        #chatbox {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 300px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            z-index: 1000;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 10px;
+            background-color: #ff5a5f;
+            font-weight: bold;
+        }
+
+        .chat-title {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .chat-messages {
+            padding: 10px;
+            height: 250px;
+            overflow-y: auto;
+            font-size: 14px;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 8px;
+            border-top: 1px solid #ccc;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .chat-input button {
+            margin-left: 8px;
+            background: #ff5a5f;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="main-header">
+    <div th:replace="~{fragments/header :: header}"></div>
+</header>
+
+<!-- Main Content -->
+<main class="main-content">
+    <h1 class="hero-title">World's Largest NoBrokerage Property Site</h1>
+
+    <!-- Features Bar -->
+    <div class="features-bar">
+        <div class="feature-item">
+
+            Rental Agreement
+        </div>
+        <div class="feature-item">
+            Next Day Delivery
+        </div>
+    </div>
+
+    <!-- Search Section -->
+    <div class="search-section">
+        <!-- Search Tabs -->
+        <div class="search-tabs">
+            <div class="search-tab active" onclick="switchTab(this, 'buy')">Buy</div>
+            <div class="search-tab" onclick="switchTab(this, 'rent')">Rent</div>
+        </div>
+
+        <!-- Search Form -->
+        <form class="search-form" th:action="@{/getProperties}" method="get">
+            <!-- Hidden input will be updated by tab selection -->
+            <input type="hidden" name="type" id="propertyType" value="buy" />
+
+            <!-- Other form elements remain unchanged -->
+            <div class="location-dropdown">
+                <select class="location-select" name="city" th:value="${selectedCity}">
+                    <option value="bangalore">Bangalore</option>
+                    <option value="mumbai">Mumbai</option>
+                    <option value="delhi">Delhi</option>
+                    <option value="pune">Pune</option>
+                    <option value="hyderabad">Hyderabad</option>
+                    <option value="chennai">Chennai</option>
+                </select>
+            </div>
+
+            <input type="text"
+                   id="autocomplete"
+                   class="search-input"
+                   placeholder="Search locality or landmark"
+                   name="query"
+                   th:value="${searchQuery}">
+
+            <button type="submit" class="search-btn">
+                <i class="fas fa-search"></i> Search
+            </button>
+        </form>
+
+        <!-- Suggested Location (unchanged) -->
+
+    </div>
+    <!-- Property Owner Section -->
+    <div class="property-owner-section">
+        <p class="property-owner-text">Are you a Property Owner?</p>
+        <button class="post-property-btn" onclick="window.location.href='/'">
+            Post Free Property Ad
+        </button>
+    </div>
+
+    <!-- Loan Banner -->
+    <div class="loan-banner">
+        <i class="fas fa-hand-holding-usd loan-icon"></i>
+        <div class="loan-text">
+            Do you know how much <strong>loan</strong> you can get? Get maximum with <strong>NoBroker</strong>
+        </div>
+        <button class="check-eligibility-btn">Check Eligibility</button>
+    </div>
+
+    <!-- Services Grid -->
+    <div class="services-grid">
+        <div class="service-card">
+            <div class="service-badge">Lowest Price</div>
+            <div class="service-icon">
+                <i class="fas fa-box"></i>
+            </div>
+            <div class="service-title">Packers & Movers</div>
+        </div>
+
+        <div class="service-card" >
+            <div class="service-badge">New Offers</div>
+            <div class="service-icon">
+                <i class="fas fa-credit-card"></i>
+            </div>
+            <div class="service-title">Pay rent</div>
+        </div>
+
+        <div class="service-card" >
+            <div class="service-badge">Flat 30% off</div>
+            <div class="service-icon">
+                <i class="fas fa-file-signature"></i>
+            </div>
+            <div class="service-title">Rental Agreement</div>
+        </div>
+
+        <div class="service-card" onclick="navigateToService('click-earn')">
+            <div class="service-icon">
+                <i class="fas fa-mouse-pointer"></i>
+            </div>
+            <div class="service-title">Click & Earn</div>
+        </div>
+
+        <div class="service-card" onclick="navigateToService('painting-cleaning')">
+            <div class="service-badge">New</div>
+            <div class="service-icon">
+                <i class="fas fa-paint-brush"></i>
+            </div>
+            <div class="service-title">Painting & Cleaning</div>
+        </div>
+
+        <div class="service-card" onclick="navigateToService('nobroker-for-nris')">
+            <div class="service-icon">
+                <i class="fas fa-globe-americas"></i>
+            </div>
+            <div class="service-title">NoBroker For NRIs</div>
+        </div>
+    </div>
+
+    <!-- Why NoBroker Section -->
+    <div class="why-nobroker-section">
+        <div class="section-header">
+            <div class="section-dots left-dots">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+            <h2 class="section-title">Why Use NoBroker</h2>
+            <div class="section-dots right-dots">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+
+        <div class="why-features-grid">
+            <div class="why-feature-card">
+                <div class="why-feature-icon">
+                    <svg width="60" height="60" viewBox="0 0 100 100">
+                        <circle cx="50" cy="35" r="15" fill="none" stroke="#ff4757" stroke-width="3"/>
+                        <path d="M30 55 Q50 45 70 55" fill="none" stroke="#ff4757" stroke-width="3"/>
+                        <circle cx="30" cy="55" r="8" fill="#ff4757"/>
+                        <circle cx="70" cy="55" r="8" fill="#ff4757"/>
+                        <path d="M35 75 L65 75" stroke="#ff4757" stroke-width="3"/>
+                    </svg>
+                </div>
+                <h3 class="why-feature-title">Avoid Brokers</h3>
+                <p class="why-feature-desc">We directly connect you to verified owners to save brokerage</p>
+            </div>
+
+            <div class="why-feature-card">
+                <div class="why-feature-icon">
+                    <svg width="60" height="60" viewBox="0 0 100 100">
+                        <rect x="25" y="20" width="50" height="60" fill="none" stroke="#20bf6b" stroke-width="3" rx="5"/>
+                        <line x1="35" y1="30" x2="65" y2="30" stroke="#20bf6b" stroke-width="2"/>
+                        <line x1="35" y1="40" x2="55" y2="40" stroke="#20bf6b" stroke-width="2"/>
+                        <line x1="35" y1="50" x2="65" y2="50" stroke="#20bf6b" stroke-width="2"/>
+                        <line x1="35" y1="60" x2="45" y2="60" stroke="#20bf6b" stroke-width="2"/>
+                    </svg>
+                </div>
+                <h3 class="why-feature-title">Free Listing</h3>
+                <p class="why-feature-desc">Easy listing process. Also using WhatsApp</p>
+            </div>
+
+            <div class="why-feature-card">
+                <div class="why-feature-icon">
+                    <svg width="60" height="60" viewBox="0 0 100 100">
+                        <path d="M30 75 L50 25 L70 75 Z" fill="none" stroke="#6c5ce7" stroke-width="3"/>
+                        <path d="M40 60 L60 60" stroke="#6c5ce7" stroke-width="2"/>
+                        <circle cx="50" cy="40" r="5" fill="#ff4757"/>
+                        <path d="M45 50 L55 50" stroke="#6c5ce7" stroke-width="2"/>
+                    </svg>
+                </div>
+                <h3 class="why-feature-title">Shortlist without Visit</h3>
+                <p class="why-feature-desc">Extensive information makes it easy</p>
+            </div>
+
+            <div class="why-feature-card">
+                <div class="why-feature-icon">
+                    <svg width="60" height="60" viewBox="0 0 100 100">
+                        <rect x="25" y="15" width="50" height="70" fill="none" stroke="#ff9f43" stroke-width="3" rx="3"/>
+                        <line x1="35" y1="25" x2="65" y2="25" stroke="#ff9f43" stroke-width="2"/>
+                        <line x1="35" y1="35" x2="55" y2="35" stroke="#ff9f43" stroke-width="2"/>
+                        <line x1="35" y1="45" x2="65" y2="45" stroke="#ff9f43" stroke-width="2"/>
+                        <circle cx="60" cy="70" r="8" fill="#ff4757"/>
+                        <path d="M56 70 L59 73 L64 67" stroke="white" stroke-width="2" fill="none"/>
+                    </svg>
+                </div>
+                <h3 class="why-feature-title">Rental Agreement</h3>
+                <p class="why-feature-desc">Assistance in creating Rental agreement & Paper work</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Business Assist Plan Section -->
+    <div class="business-assist-section">
+        <div class="section-header">
+            <div class="section-dots left-dots">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+            <h2 class="section-title">NoBroker Business Assist Plan For Builders</h2>
+            <div class="section-dots right-dots">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+
+        <div class="business-assist-content">
+            <div class="business-illustration">
+                <svg width="300" height="200" viewBox="0 0 300 200">
+                    <!-- Buildings -->
+                    <rect x="50" y="80" width="60" height="100" fill="#e8e8e8" stroke="#ccc" stroke-width="2"/>
+                    <rect x="130" y="60" width="60" height="120" fill="#f5f5f5" stroke="#ccc" stroke-width="2"/>
+                    <rect x="210" y="70" width="60" height="110" fill="#e8e8e8" stroke="#ccc" stroke-width="2"/>
+
+                    <!-- Windows for first building -->
+                    <rect x="60" y="90" width="15" height="15" fill="#ff4757"/>
+                    <rect x="85" y="90" width="15" height="15" fill="#ff4757"/>
+                    <rect x="60" y="110" width="15" height="15" fill="#ff4757"/>
+                    <rect x="85" y="110" width="15" height="15" fill="#ff4757"/>
+                    <rect x="60" y="130" width="15" height="15" fill="#ff4757"/>
+                    <rect x="85" y="130" width="15" height="15" fill="#ff4757"/>
+
+                    <!-- Windows for second building -->
+                    <rect x="140" y="70" width="15" height="15" fill="#20bf6b"/>
+                    <rect x="165" y="70" width="15" height="15" fill="#20bf6b"/>
+                    <rect x="140" y="90" width="15" height="15" fill="#20bf6b"/>
+                    <rect x="165" y="90" width="15" height="15" fill="#20bf6b"/>
+                    <rect x="140" y="110" width="15" height="15" fill="#20bf6b"/>
+                    <rect x="165" y="110" width="15" height="15" fill="#20bf6b"/>
+
+                    <!-- Windows for third building -->
+                    <rect x="220" y="80" width="15" height="15" fill="#6c5ce7"/>
+                    <rect x="245" y="80" width="15" height="15" fill="#6c5ce7"/>
+                    <rect x="220" y="100" width="15" height="15" fill="#6c5ce7"/>
+                    <rect x="245" y="100" width="15" height="15" fill="#6c5ce7"/>
+
+                    <!-- For Rent/Sale signs -->
+                    <rect x="45" y="150" width="25" height="15" fill="#ff4757" rx="2"/>
+                    <text x="57" y="161" fill="white" font-size="8" text-anchor="middle">FOR RENT</text>
+
+                    <rect x="205" y="140" width="25" height="15" fill="#ff4757" rx="2"/>
+                    <text x="217" y="151" fill="white" font-size="8" text-anchor="middle">FOR SALE</text>
+
+                    <!-- Decorative elements -->
+                    <path d="M20 180 Q150 170 280 180" stroke="#ddd" stroke-width="2" fill="none"/>
+                    <circle cx="25" cy="160" r="3" fill="#ff9f43"/>
+                    <circle cx="275" cy="160" r="3" fill="#ff9f43"/>
+                </svg>
+            </div>
+
+            <div class="business-assist-info">
+                <p class="business-assist-text">Get in touch with us to Sell or Rent Your Projects</p>
+                <button class="enquire-btn">Enquire Now</button>
+                <p class="builder-contact">For Builder Enquiries: +91 91080 50400</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- We Make A Difference Section -->
+    <div class="difference-section">
+        <div class="section-header">
+            <div class="section-dots left-dots">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+            <h2 class="section-title">We Make A Difference</h2>
+            <div class="section-dots right-dots">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+
+        <div class="difference-stats">
+            <div class="stat-circle">
+                <div class="circle-progress" data-percent="85">
+                    <svg width="120" height="120">
+                        <circle cx="60" cy="60" r="50" fill="none" stroke="#f1f1f1" stroke-width="8"/>
+                        <circle cx="60" cy="60" r="50" fill="none" stroke="#ff4757" stroke-width="8"
+                                stroke-dasharray="314" stroke-dashoffset="47" stroke-linecap="round"/>
+                    </svg>
+                    <div class="circle-content">
+                        <span class="circle-number">85%</span>
+                        <span class="circle-label">Success Rate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-circle">
+                <div class="circle-progress" data-percent="90">
+                    <svg width="120" height="120">
+                        <circle cx="60" cy="60" r="50" fill="none" stroke="#f1f1f1" stroke-width="8"/>
+                        <circle cx="60" cy="60" r="50" fill="none" stroke="#20bf6b" stroke-width="8"
+                                stroke-dasharray="314" stroke-dashoffset="31" stroke-linecap="round"/>
+                    </svg>
+                    <div class="circle-content">
+                        <span class="circle-number">90%</span>
+                        <span class="circle-label">Customer Satisfaction</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-circle">
+                <div class="circle-progress" data-percent="95">
+                    <svg width="120" height="120">
+                        <circle cx="60" cy="60" r="50" fill="none" stroke="#f1f1f1" stroke-width="8"/>
+                        <circle cx="60" cy="60" r="50" fill="none" stroke="#6c5ce7" stroke-width="8"
+                                stroke-dasharray="314" stroke-dashoffset="16" stroke-linecap="round"/>
+                    </svg>
+                    <div class="circle-content">
+                        <span class="circle-number">95%</span>
+                        <span class="circle-label">Quality Assurance</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Chat Widget -->
+<div id="chat-icon" onclick="toggleChatbox()">
+    <img src="https://assets.nobroker.in/nb-new/public/Common/chatLightBg.svg" alt="Chat"
+         style="width: 40px; height: 40px;">
+</div>
+
+<div id="chatbox" style="display: none;">
+    <div class="chat-header">
+        <img src="/images/ai_bot.png" width="70px" height="70px">
+        <div class="chat-title">
+            <div>Natasha</div>
+            <div>Your AI Assistant</div>
+        </div>
+    </div>
+    <div class="chat-messages" id="chat-messages" style="white-space: pre-line;"></div>
+    <div class="chat-input">
+        <input type="text" id="user-message" placeholder="Ask your question here.." />
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script>
+    // Search tab switching functionality
+    function switchTab(element, tabType) {
+        // Remove active class from all tabs
+        document.querySelectorAll('.search-tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+
+        // Add active class to clicked tab
+        element.classList.add('active');
+
+        // Update the hidden input field with selected property type
+        document.getElementById('propertyType').value = tabType;
+
+        // Update placeholder text based on selected tab
+        const searchInput = document.getElementById('searchInput');
+        switch(tabType) {
+            case 'buy':
+                searchInput.placeholder = 'Search properties for sale';
+                break;
+            case 'rent':
+                searchInput.placeholder = 'Search properties for rent';
+                break;
+            case 'commercial':
+                searchInput.placeholder = 'Search commercial properties';
+                break;
+            default:
+                searchInput.placeholder = 'Search up to 3 localities or landmarks';
+        }
+
+        console.log('Selected property type:', tabType);
+    }
+
+    // Form validation
+    function validateForm() {
+        const propertyType = document.getElementById('propertyType').value;
+        const city = document.getElementById('citySelect').value;
+        const query = document.getElementById('searchInput').value.trim();
+        const errorMessage = document.getElementById('errorMessage');
+
+        // Clear previous errors
+        clearErrors();
+        errorMessage.style.display = 'none';
+
+        let isValid = true;
+        let errors = [];
+
+        // Validate city selection
+        if (!city) {
+            document.getElementById('citySelect').classList.add('form-error');
+            errors.push('Please select a city');
+            isValid = false;
+        }
+
+        // Validate search query
+        if (!query) {
+            document.getElementById('searchInput').classList.add('form-error');
+            errors.push('Please enter a search query');
+            isValid = false;
+        }
+
+        // Show errors if any
+        if (!isValid) {
+            errorMessage.textContent = errors.join(', ');
+            errorMessage.style.display = 'block';
+            return false;
+        }
+
+        // Add loading state
+        const searchBtn = document.getElementById('searchButton');
+        searchBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Searching...';
+        searchBtn.disabled = true;
+
+        // Log the data being sent (for debugging)
+        console.log('Form Data:', {
+            type: propertyType,
+            city: city,
+            query: query
+        });
+
+        return true; // Allow form submission
+    }
+
+    // Clear form errors
+    function clearErrors() {
+        document.querySelectorAll('.form-error').forEach(element => {
+            element.classList.remove('form-error');
+        });
+    }
+
+    // Fill suggestion functionality
+    function fillSuggestion(suggestion) {
+        document.getElementById('searchInput').value = suggestion;
+        // Also set the city if it can be extracted from suggestion
+        if (suggestion.includes('Bangalore')) {
+            document.getElementById('citySelect').value = 'bangalore';
+        }
+    }
+
+    // ✅ DOMContentLoaded block (fully updated)
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const type = urlParams.get('type');
+        const city = urlParams.get('city');
+        const query = urlParams.get('query');
+
+        // Activate the correct tab
+        if (type) {
+            document.querySelectorAll('.search-tab').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.dataset.type === type) {
+                    tab.classList.add('active');
+                }
+            });
+            document.getElementById('propertyType').value = type;
+
+            // Update placeholder as per selected tab
+            const searchInput = document.getElementById('searchInput');
+            switch (type) {
+                case 'buy':
+                    searchInput.placeholder = 'Search properties for sale';
+                    break;
+                case 'rent':
+                    searchInput.placeholder = 'Search properties for rent';
+                    break;
+                case 'commercial':
+                    searchInput.placeholder = 'Search commercial properties';
+                    break;
+            }
+        }
+
+        // Populate city and query if available
+        if (city) {
+            document.getElementById('citySelect').value = city;
+        }
+        if (query) {
+            document.getElementById('searchInput').value = query;
+        }
+
+        // Clear error states on input
+        document.getElementById('searchInput').addEventListener('input', clearErrors);
+        document.getElementById('citySelect').addEventListener('change', clearErrors);
+    });
+
+    // Reset search button if form submission fails (e.g., back/refresh)
+    window.addEventListener('beforeunload', function() {
+        const searchBtn = document.getElementById('searchButton');
+        if (searchBtn.disabled) {
+            searchBtn.innerHTML = '<i class="fas fa-search"></i> Search';
+            searchBtn.disabled = false;
+        }
+    });
+</script>
+
+<!-- Script for chat widget AI Assistant -->
+<script>
+    function toggleChatbox() {
+        const chatbox = document.getElementById('chatbox');
+        chatbox.style.display = (chatbox.style.display === 'none') ? 'block' : 'none';
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('user-message');
+        const message = input.value.trim();
+        if (message === '') return;
+
+        appendMessage("You", message);
+        input.value = '';
+
+        fetch('/chatbot', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message })
+        })
+            .then(res => res.text())
+            .then(data => {
+                appendMessage("AI", data);
+            })
+            .catch(() => {
+                appendMessage("AI", "Sorry, something went wrong.");
+            });
+    }
+
+    function appendMessage(sender, text) {
+        const msgDiv = document.getElementById('chat-messages');
+        msgDiv.innerHTML += `<p><strong>${sender}:</strong> ${text}</p>`;
+        msgDiv.scrollTop = msgDiv.scrollHeight;
+    }
+</script>
+
+<!-- Google Places autocomplete removed for search to avoid requiring a Maps API key. -->
+
+<footer>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</footer>
+</body>
+</html>

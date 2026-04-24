@@ -1,0 +1,20 @@
+<!-- Bookmark Button -->
+<button onclick="toggleBookmark(this)"
+        th:attr="data-property-id=${property.propertyId}"
+        th:text="${bookmarkedProperties != null and bookmarkedProperties.contains(property)} ? '💔 Unbookmark' : '❤️ Bookmark'">
+</button>
+
+<script>
+    function toggleBookmark(button) {
+        const propertyId = button.getAttribute("data-property-id");
+
+        fetch(`/bookmark/toggle/${propertyId}`, {
+            method: "POST"
+        })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message);
+                button.innerText = data.isBookmarked ? '💔 Unbookmark' : '❤️ Bookmark';
+            });
+    }
+</script>
