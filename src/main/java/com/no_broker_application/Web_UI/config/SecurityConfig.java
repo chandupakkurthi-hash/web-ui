@@ -38,7 +38,7 @@ public class SecurityConfig {
                                                                 "/loginPage",
                                                                 "/send-otp",
                                                                 "/verify",
-                                                                "/verify-otp")
+                                                                "/verify-otp", "/actuator/**")
                                                 .permitAll()
                                                 .requestMatchers("/viewProperty/**", "/view-full-property", "/edit/**")
                                                 .hasAnyRole("OIDC_USER", "USER")
