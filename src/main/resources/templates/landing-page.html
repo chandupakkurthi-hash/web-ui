@@ -437,7 +437,7 @@
             text-transform: uppercase;
         }
 
-        /* Section Styling */
+        
         .why-nobroker-section,
         .business-assist-section,
         .difference-section {
@@ -492,7 +492,7 @@
             50% { opacity: 1; transform: scale(1.2); }
         }
 
-        /* Why Use NoBroker Section */
+        
         .why-features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -539,7 +539,7 @@
             font-size: 14px;
         }
 
-        /* Business Assist Section */
+        
         .business-assist-content {
             display: flex;
             align-items: center;
@@ -590,7 +590,7 @@
             font-size: 14px;
         }
 
-        /* We Make A Difference Section */
+        
         .difference-stats {
             display: flex;
             justify-content: center;
@@ -633,7 +633,7 @@
             font-weight: 500;
         }
 
-        /* Responsive Design */
+        
         @media (max-width: 768px) {
             .section-header {
                 flex-direction: column;
@@ -818,16 +818,16 @@
 </head>
 <body>
 
-<!-- Header -->
+
 <header class="main-header">
     <div th:replace="~{fragments/header :: header}"></div>
 </header>
 
-<!-- Main Content -->
+
 <main class="main-content">
     <h1 class="hero-title">World's Largest NoBrokerage Property Site</h1>
 
-    <!-- Features Bar -->
+    
     <div class="features-bar">
         <div class="feature-item">
 
@@ -838,20 +838,20 @@
         </div>
     </div>
 
-    <!-- Search Section -->
+    
     <div class="search-section">
-        <!-- Search Tabs -->
+        
         <div class="search-tabs">
             <div class="search-tab active" onclick="switchTab(this, 'buy')">Buy</div>
             <div class="search-tab" onclick="switchTab(this, 'rent')">Rent</div>
         </div>
 
-        <!-- Search Form -->
+        
         <form class="search-form" th:action="@{/getProperties}" method="get">
-            <!-- Hidden input will be updated by tab selection -->
+            
             <input type="hidden" name="type" id="propertyType" value="buy" />
 
-            <!-- Other form elements remain unchanged -->
+            
             <div class="location-dropdown">
                 <select class="location-select" name="city" th:value="${selectedCity}">
                     <option value="bangalore">Bangalore</option>
@@ -875,10 +875,10 @@
             </button>
         </form>
 
-        <!-- Suggested Location (unchanged) -->
+        
 
     </div>
-    <!-- Property Owner Section -->
+    
     <div class="property-owner-section">
         <p class="property-owner-text">Are you a Property Owner?</p>
         <button class="post-property-btn" onclick="window.location.href='/'">
@@ -886,7 +886,7 @@
         </button>
     </div>
 
-    <!-- Loan Banner -->
+    
     <div class="loan-banner">
         <i class="fas fa-hand-holding-usd loan-icon"></i>
         <div class="loan-text">
@@ -895,7 +895,7 @@
         <button class="check-eligibility-btn">Check Eligibility</button>
     </div>
 
-    <!-- Services Grid -->
+    
     <div class="services-grid">
         <div class="service-card">
             <div class="service-badge">Lowest Price</div>
@@ -944,7 +944,7 @@
         </div>
     </div>
 
-    <!-- Why NoBroker Section -->
+    
     <div class="why-nobroker-section">
         <div class="section-header">
             <div class="section-dots left-dots">
@@ -1019,7 +1019,7 @@
         </div>
     </div>
 
-    <!-- Business Assist Plan Section -->
+    
     <div class="business-assist-section">
         <div class="section-header">
             <div class="section-dots left-dots">
@@ -1038,12 +1038,12 @@
         <div class="business-assist-content">
             <div class="business-illustration">
                 <svg width="300" height="200" viewBox="0 0 300 200">
-                    <!-- Buildings -->
+                    
                     <rect x="50" y="80" width="60" height="100" fill="#e8e8e8" stroke="#ccc" stroke-width="2"/>
                     <rect x="130" y="60" width="60" height="120" fill="#f5f5f5" stroke="#ccc" stroke-width="2"/>
                     <rect x="210" y="70" width="60" height="110" fill="#e8e8e8" stroke="#ccc" stroke-width="2"/>
 
-                    <!-- Windows for first building -->
+                    
                     <rect x="60" y="90" width="15" height="15" fill="#ff4757"/>
                     <rect x="85" y="90" width="15" height="15" fill="#ff4757"/>
                     <rect x="60" y="110" width="15" height="15" fill="#ff4757"/>
@@ -1051,7 +1051,7 @@
                     <rect x="60" y="130" width="15" height="15" fill="#ff4757"/>
                     <rect x="85" y="130" width="15" height="15" fill="#ff4757"/>
 
-                    <!-- Windows for second building -->
+                    
                     <rect x="140" y="70" width="15" height="15" fill="#20bf6b"/>
                     <rect x="165" y="70" width="15" height="15" fill="#20bf6b"/>
                     <rect x="140" y="90" width="15" height="15" fill="#20bf6b"/>
@@ -1059,20 +1059,20 @@
                     <rect x="140" y="110" width="15" height="15" fill="#20bf6b"/>
                     <rect x="165" y="110" width="15" height="15" fill="#20bf6b"/>
 
-                    <!-- Windows for third building -->
+                    
                     <rect x="220" y="80" width="15" height="15" fill="#6c5ce7"/>
                     <rect x="245" y="80" width="15" height="15" fill="#6c5ce7"/>
                     <rect x="220" y="100" width="15" height="15" fill="#6c5ce7"/>
                     <rect x="245" y="100" width="15" height="15" fill="#6c5ce7"/>
 
-                    <!-- For Rent/Sale signs -->
+                    
                     <rect x="45" y="150" width="25" height="15" fill="#ff4757" rx="2"/>
                     <text x="57" y="161" fill="white" font-size="8" text-anchor="middle">FOR RENT</text>
 
                     <rect x="205" y="140" width="25" height="15" fill="#ff4757" rx="2"/>
                     <text x="217" y="151" fill="white" font-size="8" text-anchor="middle">FOR SALE</text>
 
-                    <!-- Decorative elements -->
+                    
                     <path d="M20 180 Q150 170 280 180" stroke="#ddd" stroke-width="2" fill="none"/>
                     <circle cx="25" cy="160" r="3" fill="#ff9f43"/>
                     <circle cx="275" cy="160" r="3" fill="#ff9f43"/>
@@ -1087,7 +1087,7 @@
         </div>
     </div>
 
-    <!-- We Make A Difference Section -->
+    
     <div class="difference-section">
         <div class="section-header">
             <div class="section-dots left-dots">
@@ -1149,7 +1149,7 @@
     </div>
 </main>
 
-<!-- Chat Widget -->
+
 <div id="chat-icon" onclick="toggleChatbox()">
     <img src="https://assets.nobroker.in/nb-new/public/Common/chatLightBg.svg" alt="Chat"
          style="width: 40px; height: 40px;">
@@ -1171,20 +1171,20 @@
 </div>
 
 <script>
-    // Search tab switching functionality
+
     function switchTab(element, tabType) {
-        // Remove active class from all tabs
+
         document.querySelectorAll('.search-tab').forEach(tab => {
             tab.classList.remove('active');
         });
 
-        // Add active class to clicked tab
+
         element.classList.add('active');
 
-        // Update the hidden input field with selected property type
+
         document.getElementById('propertyType').value = tabType;
 
-        // Update placeholder text based on selected tab
+
         const searchInput = document.getElementById('searchInput');
         switch(tabType) {
             case 'buy':
@@ -1203,80 +1203,80 @@
         console.log('Selected property type:', tabType);
     }
 
-    // Form validation
+
     function validateForm() {
         const propertyType = document.getElementById('propertyType').value;
         const city = document.getElementById('citySelect').value;
         const query = document.getElementById('searchInput').value.trim();
         const errorMessage = document.getElementById('errorMessage');
 
-        // Clear previous errors
+
         clearErrors();
         errorMessage.style.display = 'none';
 
         let isValid = true;
         let errors = [];
 
-        // Validate city selection
+
         if (!city) {
             document.getElementById('citySelect').classList.add('form-error');
             errors.push('Please select a city');
             isValid = false;
         }
 
-        // Validate search query
+
         if (!query) {
             document.getElementById('searchInput').classList.add('form-error');
             errors.push('Please enter a search query');
             isValid = false;
         }
 
-        // Show errors if any
+
         if (!isValid) {
             errorMessage.textContent = errors.join(', ');
             errorMessage.style.display = 'block';
             return false;
         }
 
-        // Add loading state
+
         const searchBtn = document.getElementById('searchButton');
         searchBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Searching...';
         searchBtn.disabled = true;
 
-        // Log the data being sent (for debugging)
+
         console.log('Form Data:', {
             type: propertyType,
             city: city,
             query: query
         });
 
-        return true; // Allow form submission
+        return true;
     }
 
-    // Clear form errors
+
     function clearErrors() {
         document.querySelectorAll('.form-error').forEach(element => {
             element.classList.remove('form-error');
         });
     }
 
-    // Fill suggestion functionality
+
     function fillSuggestion(suggestion) {
         document.getElementById('searchInput').value = suggestion;
-        // Also set the city if it can be extracted from suggestion
+
         if (suggestion.includes('Bangalore')) {
             document.getElementById('citySelect').value = 'bangalore';
         }
     }
 
-    // ✅ DOMContentLoaded block (fully updated)
+
     document.addEventListener('DOMContentLoaded', function() {
         const urlParams = new URLSearchParams(window.location.search);
         const type = urlParams.get('type');
         const city = urlParams.get('city');
         const query = urlParams.get('query');
 
-        // Activate the correct tab
+
         if (type) {
             document.querySelectorAll('.search-tab').forEach(tab => {
                 tab.classList.remove('active');
@@ -1286,7 +1286,7 @@
             });
             document.getElementById('propertyType').value = type;
 
-            // Update placeholder as per selected tab
+
             const searchInput = document.getElementById('searchInput');
             switch (type) {
                 case 'buy':
@@ -1301,7 +1301,7 @@
             }
         }
 
-        // Populate city and query if available
+
         if (city) {
             document.getElementById('citySelect').value = city;
         }
@@ -1309,12 +1309,12 @@
             document.getElementById('searchInput').value = query;
         }
 
-        // Clear error states on input
+
         document.getElementById('searchInput').addEventListener('input', clearErrors);
         document.getElementById('citySelect').addEventListener('change', clearErrors);
     });
 
-    // Reset search button if form submission fails (e.g., back/refresh)
+
     window.addEventListener('beforeunload', function() {
         const searchBtn = document.getElementById('searchButton');
         if (searchBtn.disabled) {
@@ -1324,7 +1324,7 @@
     });
 </script>
 
-<!-- Script for chat widget AI Assistant -->
+
 <script>
     function toggleChatbox() {
         const chatbox = document.getElementById('chatbox');
@@ -1362,7 +1362,7 @@
     }
 </script>
 
-<!-- Google Places autocomplete removed for search to avoid requiring a Maps API key. -->
+
 
 <footer>
     <div th:replace="~{fragments/footer :: footer}"></div>
