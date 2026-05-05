@@ -383,7 +383,7 @@
         document.getElementById("pay-btn").addEventListener("click", function () {
             const price = this.getAttribute("data-price");
 
-            fetch("/api/payment/create-checkout-session", {
+            fetch("/billing/payment/create-checkout-session", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

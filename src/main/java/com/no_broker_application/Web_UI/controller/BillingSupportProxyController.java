@@ -14,6 +14,12 @@ public class BillingSupportProxyController {
 
     private final BillingSupportServiceClient billingSupportServiceClient;
 
+    @PostMapping("/billing/payment/create-checkout-session")
+    public ResponseEntity<String> createCheckoutSessionViaWebUi(@RequestBody Map<String, Object> requestBody,
+                                                                HttpSession session) {
+        return createCheckoutSession(requestBody, session);
+    }
+
     @PostMapping("/api/payment/create-checkout-session")
     public ResponseEntity<String> createCheckoutSession(@RequestBody Map<String, Object> requestBody,
                                                         HttpSession session) {
