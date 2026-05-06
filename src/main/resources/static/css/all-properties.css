@@ -256,6 +256,7 @@
         .main-area {
             flex: 1;
             overflow-y: auto;
+            scrollbar-gutter: stable;
             padding: 20px;
             background: #f9f9f9;
         }
